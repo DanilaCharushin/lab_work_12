@@ -13,6 +13,7 @@ public class BigBird extends Bird
         this.cordY = cordY;
         COUNT++;
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         if (image == null)
@@ -25,7 +26,7 @@ public class BigBird extends Bird
         System.out.println("BigBird moved");
     }
 
-    public static void setImage(String imagePath) {
+    public static void SET_IMAGE(String imagePath) {
         try {
             image = ImageIO.read(new File(imagePath));
         } catch (IOException e) {
@@ -43,5 +44,10 @@ public class BigBird extends Bird
 
     public static Image GET_IMAGE() {
         return image;
+    }
+
+    @Override
+    public String toString() {
+        return "BigBird in " +  cordX + ";" + cordY;
     }
 }

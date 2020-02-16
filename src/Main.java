@@ -10,8 +10,10 @@ public class Main
 {
     public static void main(String args[])
     {
-        int N1 = 1000, N2 = 1000;
-        double P1 = 0.5, K = 0.7;
+        int N1 = 5000;
+        int N2 = 5000;
+        double P1 = 1;
+        double K = 0.5;
         /*Scanner cin = new Scanner(System.in);
         System.out.println("N1 = ");
         N1 = cin.nextInt();

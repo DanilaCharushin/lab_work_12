@@ -26,7 +26,7 @@ public class SmallBird extends Bird
         System.out.println("SmallBird moved");
     }
 
-    public static void setImage(String imagePath) {
+    public static void SET_IMAGE(String imagePath) {
         try {
             image = ImageIO.read(new File(imagePath));
         } catch (IOException e) {
@@ -44,5 +44,10 @@ public class SmallBird extends Bird
 
     public static Image GET_IMAGE() {
         return image;
+    }
+
+    @Override
+    public String toString() {
+        return "SmallBird in " +  cordX + ";" + cordY;
     }
 }
