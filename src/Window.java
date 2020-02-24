@@ -12,20 +12,11 @@ public class Window extends JFrame {
     private int WINDOW_WIDTH;
     private int WINDOW_HEIGHT;
 
-    private InfoDialog infoDialog;
-    private JPanel menuPanel;
-    private JButton buttonStart;
-    private JButton buttonStop;
     private JLabel timeLabel;
-
-    private JCheckBox INFO_DIALOG_VISIBLE;
-    private ButtonGroup timeGroup;
-    private JRadioButton timeVisibleTrue;
-    private JRadioButton timeVisibleFalse;
+    private JTextArea infoArea;
 
     private Timer timer;
     private Habitat habitat;
-
 
 
     public Window(int WIDTH, int HEIGHT, Habitat habitat) {
@@ -37,45 +28,41 @@ public class Window extends JFrame {
         this.setTitle("Крутые птички!!!");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBounds(SCREEN.width/2 - WIDTH/2, SCREEN.height/2 - HEIGHT/2, WIDTH, HEIGHT);
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
         this.setIconImage(new ImageIcon("res/favicon.png").getImage());
         this.setResizable(true);
 
-        menuPanel = new JPanel(new GridLayout(3, 2));
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        constraints.gridy = 0;
+        constraints.gridx = 0;
         timeLabel = new JLabel("Время: 0");
+        timeLabel.setFocusable(false);
+        timeLabel.setVisible(true);
+        this.add(timeLabel, constraints);
 
-        buttonStart = new JButton("START");
-        buttonStop = new JButton("STOP");
-        buttonStart.setEnabled(true);
-        buttonStop.setEnabled(false);
-        buttonStart.setFocusable(false);
-        buttonStop.setFocusable(false);
-        buttonStart.addActionListener(actionEvent -> START());
-        buttonStop.addActionListener(actionEvent -> PAUSE());
+        infoArea = new JTextArea();
+        infoArea.setBounds(0, 0, 100, 100);
+        infoArea.setBackground(new Color(148, 220, 242));
+        infoArea.setForeground(new Color(54, 77, 110));
+        infoArea.setFont(new Font("Helvetica", Font.ITALIC, 10));
+        infoArea.setFocusable(false);
+        infoArea.setVisible(false);
 
-        INFO_DIALOG_VISIBLE = new JCheckBox("Отобразить информационное окно");
-        INFO_DIALOG_VISIBLE.setSelected(true);
-        INFO_DIALOG_VISIBLE.setFocusable(false);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridy = 1;
+        this.add(infoArea, constraints);
 
-        timeGroup = new ButtonGroup();
-        timeVisibleTrue = new JRadioButton("Отображать время симуляции");
-        timeVisibleTrue.setSelected(true);
-        timeVisibleTrue.setFocusable(false);
-        timeVisibleFalse = new JRadioButton("Не отображать время симуляции");
-        timeVisibleFalse.setFocusable(false);
-        timeGroup.add(timeVisibleTrue);
-        timeGroup.add(timeVisibleFalse);
+        constraints.ipady = 500;
+        constraints.ipadx = 400;
+        constraints.weightx = 9;
+        constraints.gridheight = 2;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
 
-        menuPanel.add(buttonStart);
-        menuPanel.add(buttonStop);
-        menuPanel.add(timeLabel);
-        menuPanel.add(INFO_DIALOG_VISIBLE);
-        menuPanel.add(timeVisibleTrue);
-        menuPanel.add(timeVisibleFalse);
-        menuPanel.setFocusable(false);
-
-        this.add(this.habitat);
-        this.add(menuPanel, BorderLayout.WEST);
+        this.add(this.habitat, constraints);
         this.setFocusable(true);
         this.addKeyListener(new KeyAdapter() {
             @Override
@@ -85,19 +72,11 @@ public class Window extends JFrame {
                         START();
                         break;
                     case KeyEvent.VK_E:
-                        PAUSE();
+                        STOP();
                         break;
                     case KeyEvent.VK_T:
                         TIME_LABEL_VISIBLE = !TIME_LABEL_VISIBLE;
                         timeLabel.setVisible(TIME_LABEL_VISIBLE);
-                        if (TIME_LABEL_VISIBLE) {
-                            timeVisibleTrue.setSelected(true);
-                            timeVisibleFalse.setSelected(false);
-                        } else {
-                            timeVisibleTrue.setSelected(false);
-                            timeVisibleFalse.setSelected(true);
-                        }
-
                         break;
                     case KeyEvent.VK_ESCAPE:
                         System.exit(0);
@@ -106,86 +85,26 @@ public class Window extends JFrame {
             }
         });
         this.setVisible(true);
-
-        infoDialog = new InfoDialog("Информация о симуляции");
     }
 
     private void START() {
         if (habitat.beginSimulation()) {
-            buttonStart.setEnabled(false);
-            buttonStop.setEnabled(true);
-            runTimer();
+            infoArea.setVisible(false);
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timeLabel.setVisible(TIME_LABEL_VISIBLE);
+                    timeLabel.setText(habitat.getTime());
+                }
+            }, 0, habitat.getPeriod());
         }
-    }
-    private void PAUSE() {
-        timer.cancel();
-        habitat.pauseSimulation();
-        infoDialog.setText(habitat.getInfo());
-        infoDialog.setVisible(INFO_DIALOG_VISIBLE.isSelected());
-    }
-    private void CONTINUE() {
-        runTimer();
-        habitat.continueSimulation();
-        infoDialog.setVisible(false);
     }
     private void STOP() {
         if (habitat.endSimulation()) {
-            buttonStart.setEnabled(true);
-            buttonStop.setEnabled(false);
-            infoDialog.setVisible(false);
-        }
-    }
-
-    private void runTimer() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                TIME_LABEL_VISIBLE = timeVisibleTrue.isSelected();
-                timeLabel.setVisible(TIME_LABEL_VISIBLE);
-                timeLabel.setText(habitat.getTime());
-            }
-        }, 0, habitat.getPeriod());
-    }
-
-    private class InfoDialog extends JDialog {
-
-        private JTextArea infoArea;
-        private JButton buttonOK;
-        private JButton buttonCancel;
-        private int DIALOG_WIDTH = 200;
-        private int DIALOG_HEIGHT = 200;
-
-        public InfoDialog (String title) {
-            this.setTitle(title);
-            this.setBounds(SCREEN.width/2 + WINDOW_WIDTH/2, SCREEN.height/2 - WINDOW_HEIGHT/2, DIALOG_WIDTH, DIALOG_HEIGHT);
-            this.setLayout(new GridLayout(2,1));
-
-            infoArea = new JTextArea();
-            infoArea.setBounds(0, 0, 100, 100);
-            infoArea.setBackground(new Color(148, 220, 242));
-            infoArea.setForeground(new Color(54, 77, 110));
-            infoArea.setFont(new Font("Helvetica", Font.ITALIC, 10));
-            infoArea.setFocusable(false);
-
-            buttonOK = new JButton("OK");
-            buttonCancel = new JButton("Отмена");
-
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.add(buttonOK);
-            buttonPanel.add(buttonCancel);
-
-            buttonOK.addActionListener(actionEvent -> CONTINUE());
-            buttonCancel.addActionListener(actionEvent -> STOP());
-
-            this.add(infoArea);
-            this.add(buttonPanel);
-        }
-
-        public void setText(String text) {
-            infoArea.setText(text);
+            infoArea.setText(habitat.getInfo());
+            infoArea.setVisible(true);
+            timer.cancel();
         }
     }
 }
-
-

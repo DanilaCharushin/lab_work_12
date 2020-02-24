@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class Habitat extends JComponent {
     private long BEGIN_TIME = 0;
@@ -11,6 +12,7 @@ public class Habitat extends JComponent {
     private int PERIOD;
     private BirdFactory birdFactory;
     private boolean IS_RUNNING = false;
+    private Vector<Bird> birds;
 
     private Timer timer = null;
 
@@ -39,7 +41,7 @@ public class Habitat extends JComponent {
                 int imageHeight = BigBird.GET_IMAGE().getHeight(null);
                 int cordX = (int) (Math.random() * (WIDTH + 1 - imageWidth - 10));
                 int cordY = (int) (Math.random() * (HEIGHT + 1 - imageHeight - 50));
-                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY));
+                birds.addElement(birdFactory.createBird(cordX, cordY));
             }
         }
 
@@ -51,7 +53,7 @@ public class Habitat extends JComponent {
                 int imageHeight = SmallBird.GET_IMAGE().getHeight(null);
                 int cordX = (int) (Math.random() * (WIDTH + 1 - imageWidth - 10));
                 int cordY = (int) (Math.random() * (HEIGHT + 1 - imageHeight - 50));
-                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY));
+                birds.addElement(birdFactory.createBird(cordX, cordY));
             }
         }
     }
@@ -60,30 +62,8 @@ public class Habitat extends JComponent {
         if (IS_RUNNING)
             return false;
         IS_RUNNING = true;
-
+        birds = new Vector<Bird>();
         BEGIN_TIME = System.currentTimeMillis() / PERIOD * PERIOD;
-        runTimer();
-        return true;
-    }
-
-    public boolean endSimulation() {
-        if (!IS_RUNNING)
-            return false;
-        IS_RUNNING = false;
-        timer.cancel();
-        BirdArray.getBirdArray().removeAllBirds();
-        return true;
-    }
-
-    public void pauseSimulation() {
-        timer.cancel();
-    }
-
-    public void continueSimulation() {
-        runTimer();
-    }
-
-    private void runTimer() {
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -93,6 +73,16 @@ public class Habitat extends JComponent {
                 repaint();
             }
         }, 0, PERIOD);
+        return true;
+    }
+
+    public boolean endSimulation() {
+        if (!IS_RUNNING)
+            return false;
+        IS_RUNNING = false;
+        timer.cancel();
+        //birds.removeAllElements();
+        return true;
     }
 
     public int getPeriod() {
@@ -121,7 +111,11 @@ public class Habitat extends JComponent {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        BirdArray.getBirdArray().paintBirds(g);
+        if (birds != null) {
+            for (Bird bird : birds) {
+                bird.drawBird(g);
+            }
+        }
     }
 
     private static BirdFactory createBirdFactory(String bird) {
