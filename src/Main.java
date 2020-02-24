@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
 /*
  * Вариант 12
@@ -10,19 +12,12 @@ public class Main
 {
     public static void main(String args[])
     {
-        int N1 = 5000;
-        int N2 = 5000;
+        int N1 = 500;
+        int N2 = 500;
         double P1 = 1;
         double K = 0.5;
-        /*Scanner cin = new Scanner(System.in);
-        System.out.println("N1 = ");
-        N1 = cin.nextInt();
-        System.out.println("N2 = ");
-        N2 = cin.nextInt();
-        System.out.println("P1 = ");
-        P1 = cin.nextDouble();
-        System.out.println("K = ");
-        K = cin.nextDouble();*/
-        new Habitat(500, 500, N1, N2, P1, K);
+        int PERIOD = 100;
+
+        new Window(700,500,  new Habitat(N1, N2, P1, K, PERIOD));
     }
 }

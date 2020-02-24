@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2e77a3c1-4aef-4522-8421-505be6818fea" name="Default Changelist" comment="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="2e77a3c1-4aef-4522-8421-505be6818fea" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Bird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Bird.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBird.class" afterDir="false" />
@@ -32,6 +33,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="laba_2" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1XkJslzoweR4RmqhkoFJoAkE9zd" />
@@ -44,13 +50,13 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\workspace\Java\res" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\workspace\Java\res" />
     </key>
   </component>
@@ -101,8 +107,30 @@
       <workItem from="1581780102103" duration="725000" />
       <workItem from="1581829397842" duration="3980000" />
       <workItem from="1581836014045" duration="8052000" />
-      <workItem from="1581859291856" duration="2662000" />
+      <workItem from="1581859291856" duration="3655000" />
+      <workItem from="1581904380835" duration="2283000" />
+      <workItem from="1581925572528" duration="1355000" />
+      <workItem from="1581992142826" duration="1466000" />
+      <workItem from="1582003093560" duration="3175000" />
+      <workItem from="1582024481295" duration="2837000" />
+      <workItem from="1582077074014" duration="5258000" />
+      <workItem from="1582101252852" duration="8561000" />
+      <workItem from="1582185747752" duration="4253000" />
+      <workItem from="1582265372224" duration="5197000" />
+      <workItem from="1582275124685" duration="8929000" />
+      <workItem from="1582335331841" duration="1012000" />
+      <workItem from="1582352191020" duration="16917000" />
+      <workItem from="1582435457074" duration="5581000" />
+      <workItem from="1582521630303" duration="511000" />
     </task>
+    <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
+      <created>1581862107011</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1581862107011</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,5 +148,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать" />
+    <option name="LAST_COMMIT_MESSAGE" value="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать" />
   </component>
 </project>

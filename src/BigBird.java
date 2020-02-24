@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +14,9 @@ public class BigBird extends Bird
         this.cordY = cordY;
         COUNT++;
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        if (image == null)
-            return;
-        g.drawImage(image, cordX, cordY, this);
-    }
+    public void drawBird(Graphics g) {
+        g.drawImage(image, cordX, cordY, null);
+}
 
     @Override
     public void move() {
@@ -27,11 +24,7 @@ public class BigBird extends Bird
     }
 
     public static void SET_IMAGE(String imagePath) {
-        try {
-            image = ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = new ImageIcon(imagePath).getImage();
     }
 
     public static void ZERO_COUNT() {
