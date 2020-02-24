@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2e77a3c1-4aef-4522-8421-505be6818fea" name="Default Changelist" comment="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Bird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Bird.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBird.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SmallBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SmallBird.java" afterDir="false" />
-    </list>
+    <list default="true" id="2e77a3c1-4aef-4522-8421-505be6818fea" name="Default Changelist" comment="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
