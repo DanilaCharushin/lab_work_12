@@ -8,16 +8,18 @@ public class Habitat extends JComponent {
     private long END_TIME = 0;
     private long LAST_BIG_BIRD_TIME = 0;
     private long LAST_SMALL_BIRD_TIME = 0;
-    private int PERIOD;
     private BirdFactory birdFactory;
     private boolean IS_RUNNING = false;
 
     private Timer timer = null;
 
-    private int N1, N2;
-    private double P1, K;
+    private int N1 = 500;
+    private int N2 = 500;
+    private double P1 = 1;
+    private double K = 0.5;
+    private int PERIOD = 100;
 
-    public Habitat(int N1, int N2, double P1, double K, int PERIOD) {
+    public Habitat() {
         this.N1 = N1;
         this.N2 = N2;
         this.P1 = P1;
@@ -25,6 +27,26 @@ public class Habitat extends JComponent {
         this.PERIOD = PERIOD;
         BigBird.SET_IMAGE("res/BigBird.png");
         SmallBird.SET_IMAGE("res/SmallBird.png");
+    }
+
+    public void setN1(int n1) {
+        N1 = n1;
+    }
+
+    public void setN2(int n2) {
+        N2 = n2;
+    }
+
+    public void setP1(double p1) {
+        P1 = p1;
+    }
+
+    public void setK(double k) {
+        K = k;
+    }
+
+    public void setPERIOD(int PERIOD) {
+        this.PERIOD = PERIOD;
     }
 
     public void update(long time) {

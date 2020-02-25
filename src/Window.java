@@ -1,9 +1,16 @@
+import javafx.scene.control.ComboBox;
+
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.Vector;
 
 public class Window extends JFrame {
 
@@ -18,6 +25,12 @@ public class Window extends JFrame {
     private JButton buttonStop;
     private JLabel timeLabel;
 
+    private JTextField textFieldN1;
+    private JTextField textFieldN2;
+
+    private JComboBox comboBoxP1;
+    private JList listK;
+
     private JCheckBox INFO_DIALOG_VISIBLE;
     private ButtonGroup timeGroup;
     private JRadioButton timeVisibleTrue;
@@ -28,10 +41,10 @@ public class Window extends JFrame {
 
 
 
-    public Window(int WIDTH, int HEIGHT, Habitat habitat) {
+    public Window(int WIDTH, int HEIGHT) {
         this.WINDOW_WIDTH = WIDTH;
         this.WINDOW_HEIGHT = HEIGHT;
-        this.habitat = habitat;
+        this.habitat = new Habitat();
         this.habitat.setFocusable(false);
 
         this.setTitle("Крутые птички!!!");
@@ -41,7 +54,7 @@ public class Window extends JFrame {
         this.setIconImage(new ImageIcon("res/favicon.png").getImage());
         this.setResizable(true);
 
-        menuPanel = new JPanel(new GridLayout(3, 2));
+        menuPanel = new JPanel(new GridLayout(5, 2));
         timeLabel = new JLabel("Время: 0");
 
         buttonStart = new JButton("START");
@@ -57,6 +70,10 @@ public class Window extends JFrame {
         INFO_DIALOG_VISIBLE.setSelected(true);
         INFO_DIALOG_VISIBLE.setFocusable(false);
 
+        INFO_DIALOG_VISIBLE.addItemListener(itemEvent -> {
+            infoDialog.setVisible(((JCheckBox)itemEvent.getItem()).isSelected());
+        });
+
         timeGroup = new ButtonGroup();
         timeVisibleTrue = new JRadioButton("Отображать время симуляции");
         timeVisibleTrue.setSelected(true);
@@ -66,18 +83,49 @@ public class Window extends JFrame {
         timeGroup.add(timeVisibleTrue);
         timeGroup.add(timeVisibleFalse);
 
+        textFieldN1 = new JTextField("N1");
+        textFieldN2 = new JTextField("N2");
+        //textFieldN1.setFocusable(false);
+        //textFieldN2.setFocusable(false);
+
+        comboBoxP1 = new JComboBox();
+        comboBoxP1.setFocusable(false);
+        for (int i = 0; i <= 100; i += 10) {
+            comboBoxP1.addItem("" + i + "%");
+        }
+        comboBoxP1.addItemListener(itemEvent -> {
+
+        });
+
+        listK = new JList();
+        //listK.setFocusable(false);
+        Vector<String> listData = new Vector<String>();
+        for (int i = 0; i <= 100; i += 10) {
+            listData.add("" + i + "%");
+        }
+        listK.setListData(listData);
+        listK.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listK.addListSelectionListener(listSelectionEvent -> {
+
+        });
+
+
         menuPanel.add(buttonStart);
         menuPanel.add(buttonStop);
         menuPanel.add(timeLabel);
         menuPanel.add(INFO_DIALOG_VISIBLE);
         menuPanel.add(timeVisibleTrue);
         menuPanel.add(timeVisibleFalse);
+        menuPanel.add(textFieldN1);
+        menuPanel.add(textFieldN2);
+        menuPanel.add(comboBoxP1);
+        menuPanel.add(listK);
         menuPanel.setFocusable(false);
 
-        this.add(this.habitat);
+        this.add(habitat);
         this.add(menuPanel, BorderLayout.WEST);
-        this.setFocusable(true);
-        this.addKeyListener(new KeyAdapter() {
+        menuPanel.setFocusable(true);
+        menuPanel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 switch (keyEvent.getKeyCode()) {
@@ -141,9 +189,13 @@ public class Window extends JFrame {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                TIME_LABEL_VISIBLE = timeVisibleTrue.isSelected();
                 timeLabel.setVisible(TIME_LABEL_VISIBLE);
                 timeLabel.setText(habitat.getTime());
+                menuPanel.setFocusable(true);
+                habitat.setN1(Integer.parseInt(textFieldN1.getText()));
+                habitat.setN2(Integer.parseInt(textFieldN2.getText()));
+                habitat.setP1(comboBoxP1.getSelectedIndex()*0.1);
+                habitat.setK(listK.getSelectedIndex()*0.1);
             }
         }, 0, habitat.getPeriod());
     }

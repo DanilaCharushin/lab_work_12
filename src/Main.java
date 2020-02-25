@@ -12,12 +12,6 @@ public class Main
 {
     public static void main(String args[])
     {
-        int N1 = 500;
-        int N2 = 500;
-        double P1 = 1;
-        double K = 0.5;
-        int PERIOD = 100;
-
-        new Window(700,500,  new Habitat(N1, N2, P1, K, PERIOD));
+        new Window(700,500);
     }
 }
