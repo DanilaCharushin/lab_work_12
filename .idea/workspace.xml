@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="" />
+    <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BirdArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdArray.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BirdArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +48,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -109,6 +123,14 @@
       <workItem from="1582435457074" duration="5581000" />
       <workItem from="1582521630303" duration="511000" />
       <workItem from="1582607996814" duration="2239000" />
+      <workItem from="1582690949595" duration="1065000" />
+      <workItem from="1582717654545" duration="2014000" />
+      <workItem from="1582770953762" duration="31000" />
+      <workItem from="1582790266262" duration="1714000" />
+      <workItem from="1582874347022" duration="2182000" />
+      <workItem from="1582965277095" duration="2063000" />
+      <workItem from="1583208152953" duration="66000" />
+      <workItem from="1583392669844" duration="4636000" />
     </task>
     <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
       <created>1581862107011</created>

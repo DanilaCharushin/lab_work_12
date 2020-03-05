@@ -1,6 +1,9 @@
 import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -15,117 +18,36 @@ import java.util.Vector;
 public class Window extends JFrame {
 
     private boolean TIME_LABEL_VISIBLE = true;
-    private Dimension SCREEN = Toolkit.getDefaultToolkit().getScreenSize();
+    private int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+
     private int WINDOW_WIDTH;
     private int WINDOW_HEIGHT;
 
     private InfoDialog infoDialog;
-    private JPanel menuPanel;
-    private JButton buttonStart;
-    private JButton buttonStop;
-    private JLabel timeLabel;
-
-    private JTextField textFieldN1;
-    private JTextField textFieldN2;
-
-    private JComboBox comboBoxP1;
-    private JList listK;
-
-    private JCheckBox INFO_DIALOG_VISIBLE;
-    private ButtonGroup timeGroup;
-    private JRadioButton timeVisibleTrue;
-    private JRadioButton timeVisibleFalse;
+    private ErrorDialog errorDialog;
+    private ControlPanel controlPanel;
 
     private Timer timer;
     private Habitat habitat;
 
-
-
     public Window(int WIDTH, int HEIGHT) {
         this.WINDOW_WIDTH = WIDTH;
         this.WINDOW_HEIGHT = HEIGHT;
-        this.habitat = new Habitat();
-        this.habitat.setFocusable(false);
+        setTitle("Крутые птички!!!");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(SCREEN_WIDTH / 2 - WINDOW_WIDTH / 2, SCREEN_HEIGHT / 2 - WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT);
+        setLayout(new BorderLayout());
+        setIconImage(new ImageIcon("res/favicon.png").getImage());
+        setResizable(true);
 
-        this.setTitle("Крутые птички!!!");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setBounds(SCREEN.width/2 - WIDTH/2, SCREEN.height/2 - HEIGHT/2, WIDTH, HEIGHT);
-        this.setLayout(new BorderLayout());
-        this.setIconImage(new ImageIcon("res/favicon.png").getImage());
-        this.setResizable(true);
+        add((controlPanel = new ControlPanel()), BorderLayout.WEST);
 
-        menuPanel = new JPanel(new GridLayout(5, 2));
-        timeLabel = new JLabel("Время: 0");
+        habitat = new Habitat(1000, 1000, 1, 1);
+        habitat.setFocusable(false);
+        add(habitat);
 
-        buttonStart = new JButton("START");
-        buttonStop = new JButton("STOP");
-        buttonStart.setEnabled(true);
-        buttonStop.setEnabled(false);
-        buttonStart.setFocusable(false);
-        buttonStop.setFocusable(false);
-        buttonStart.addActionListener(actionEvent -> START());
-        buttonStop.addActionListener(actionEvent -> PAUSE());
-
-        INFO_DIALOG_VISIBLE = new JCheckBox("Отобразить информационное окно");
-        INFO_DIALOG_VISIBLE.setSelected(true);
-        INFO_DIALOG_VISIBLE.setFocusable(false);
-
-        INFO_DIALOG_VISIBLE.addItemListener(itemEvent -> {
-            infoDialog.setVisible(((JCheckBox)itemEvent.getItem()).isSelected());
-        });
-
-        timeGroup = new ButtonGroup();
-        timeVisibleTrue = new JRadioButton("Отображать время симуляции");
-        timeVisibleTrue.setSelected(true);
-        timeVisibleTrue.setFocusable(false);
-        timeVisibleFalse = new JRadioButton("Не отображать время симуляции");
-        timeVisibleFalse.setFocusable(false);
-        timeGroup.add(timeVisibleTrue);
-        timeGroup.add(timeVisibleFalse);
-
-        textFieldN1 = new JTextField("N1");
-        textFieldN2 = new JTextField("N2");
-        //textFieldN1.setFocusable(false);
-        //textFieldN2.setFocusable(false);
-
-        comboBoxP1 = new JComboBox();
-        comboBoxP1.setFocusable(false);
-        for (int i = 0; i <= 100; i += 10) {
-            comboBoxP1.addItem("" + i + "%");
-        }
-        comboBoxP1.addItemListener(itemEvent -> {
-
-        });
-
-        listK = new JList();
-        //listK.setFocusable(false);
-        Vector<String> listData = new Vector<String>();
-        for (int i = 0; i <= 100; i += 10) {
-            listData.add("" + i + "%");
-        }
-        listK.setListData(listData);
-        listK.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listK.addListSelectionListener(listSelectionEvent -> {
-
-        });
-
-
-        menuPanel.add(buttonStart);
-        menuPanel.add(buttonStop);
-        menuPanel.add(timeLabel);
-        menuPanel.add(INFO_DIALOG_VISIBLE);
-        menuPanel.add(timeVisibleTrue);
-        menuPanel.add(timeVisibleFalse);
-        menuPanel.add(textFieldN1);
-        menuPanel.add(textFieldN2);
-        menuPanel.add(comboBoxP1);
-        menuPanel.add(listK);
-        menuPanel.setFocusable(false);
-
-        this.add(habitat);
-        this.add(menuPanel, BorderLayout.WEST);
-        menuPanel.setFocusable(true);
-        menuPanel.addKeyListener(new KeyAdapter() {
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 switch (keyEvent.getKeyCode()) {
@@ -137,14 +59,15 @@ public class Window extends JFrame {
                         break;
                     case KeyEvent.VK_T:
                         TIME_LABEL_VISIBLE = !TIME_LABEL_VISIBLE;
-                        timeLabel.setVisible(TIME_LABEL_VISIBLE);
+                        /*controlPanel.getTimeLabel().setVisible(TIME_LABEL_VISIBLE);
+                        controlPanel.resetTimeVisibleGroup();
                         if (TIME_LABEL_VISIBLE) {
                             timeVisibleTrue.setSelected(true);
                             timeVisibleFalse.setSelected(false);
                         } else {
                             timeVisibleTrue.setSelected(false);
                             timeVisibleFalse.setSelected(true);
-                        }
+                        }*/
 
                         break;
                     case KeyEvent.VK_ESCAPE:
@@ -153,34 +76,38 @@ public class Window extends JFrame {
                 }
             }
         });
-        this.setVisible(true);
 
+        setVisible(true);
         infoDialog = new InfoDialog("Информация о симуляции");
     }
 
+
     private void START() {
         if (habitat.beginSimulation()) {
-            buttonStart.setEnabled(false);
-            buttonStop.setEnabled(true);
+            //controlPanel.getButtonStart().setEnabled(false);
+            //controlPanel.getButtonStop().setEnabled(true);
             runTimer();
         }
     }
+
     private void PAUSE() {
         timer.cancel();
         habitat.pauseSimulation();
-        infoDialog.setText(habitat.getInfo());
-        infoDialog.setVisible(INFO_DIALOG_VISIBLE.isSelected());
+        //infoDialog.setText(habitat.getInfo());
+        //infoDialog.setVisible(INFO_DIALOG_VISIBLE.isSelected());
     }
+
     private void CONTINUE() {
         runTimer();
         habitat.continueSimulation();
-        infoDialog.setVisible(false);
+        //infoDialog.setVisible(false);
     }
+
     private void STOP() {
         if (habitat.endSimulation()) {
-            buttonStart.setEnabled(true);
-            buttonStop.setEnabled(false);
-            infoDialog.setVisible(false);
+            //controlPanel.getButtonStart().setEnabled(true);
+            //controlPanel.getButtonStop().setEnabled(false);
+            //infoDialog.setVisible(false);
         }
     }
 
@@ -189,17 +116,278 @@ public class Window extends JFrame {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                timeLabel.setVisible(TIME_LABEL_VISIBLE);
-                timeLabel.setText(habitat.getTime());
-                menuPanel.setFocusable(true);
-                habitat.setN1(Integer.parseInt(textFieldN1.getText()));
-                habitat.setN2(Integer.parseInt(textFieldN2.getText()));
-                habitat.setP1(comboBoxP1.getSelectedIndex()*0.1);
-                habitat.setK(listK.getSelectedIndex()*0.1);
+                /*controlPanel.getTimeLabel().setVisible(TIME_LABEL_VISIBLE);
+                controlPanel.getTimeLabel().setText(habitat.getTime());
+                //menuPanel.setFocusable(true);
+                habitat.setN1(controlPanel.getN1());
+                habitat.setN2(controlPanel.getN2());*/
             }
         }, 0, habitat.getPeriod());
     }
 
+
+    //TODO
+    private class ControlPanel extends JPanel {
+        private ButtonPanel buttonPanel;
+        private CheckBoxPanel checkBoxPanel;
+        private RadioButtonPanel radioButtonPanel;
+        private TextFieldPanel textFieldPanel;
+        private ComboBoxListPanel comboBoxListPanel;
+        private SliderPanel sliderPanel;
+
+        public ControlPanel() {
+            setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 1;
+            gbc.weighty = 0.33;
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.insets = new Insets(4, 4, 4, 4);
+
+            add((buttonPanel = new ButtonPanel()), gbc);
+            gbc.gridy++;
+            add((checkBoxPanel = new CheckBoxPanel()), gbc);
+            gbc.gridy++;
+            add((radioButtonPanel = new RadioButtonPanel()), gbc);
+            gbc.gridy++;
+            add((textFieldPanel = new TextFieldPanel()), gbc);
+            gbc.gridy++;
+            add((comboBoxListPanel = new ComboBoxListPanel()), gbc);
+            gbc.gridy++;
+            add((sliderPanel = new SliderPanel()), gbc);
+        }
+
+        private class ButtonPanel extends JPanel {
+            private JButton buttonStart;
+            private JButton buttonStop;
+            private JButton buttonPauseContinue;
+            private JLabel label;
+
+            public ButtonPanel() {
+                setLayout(new GridBagLayout());
+                setBorder(new CompoundBorder(new TitledBorder("RUN"), new EmptyBorder(0, 0, 0, 0)));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(0, 2, 0, 2);
+
+                /*JPanel panel = new JPanel(new GridBagLayout());
+                panel.add(new JLabel("RUN: "), gbc);
+                gbc.gridx++;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(0, 0, 0, 0);
+                panel.add((label = new JLabel()), gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(4, 4, 4, 4);
+                add(panel, gbc);*/
+
+                gbc.gridwidth = 1;
+                gbc.weightx = 0;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((buttonStart = new JButton("Start")), gbc);
+                gbc.gridx++;
+                add((buttonStop = new JButton("Stop")), gbc);
+                gbc.gridx++;
+                add((buttonPauseContinue = new JButton("Pause/Continue")), gbc);
+            }
+        }
+
+        private class CheckBoxPanel extends JPanel {
+            private JLabel timeLabel;
+            private JCheckBox showInfo;
+
+            public CheckBoxPanel() {
+                setLayout(new GridBagLayout());
+                setBorder(new CompoundBorder(new TitledBorder("INFO"), new EmptyBorder(12, 0, 0, 0)));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(0, 0, 0, 4);
+
+                JPanel panel = new JPanel(new GridBagLayout());
+                panel.add(new JLabel("INFO: "), gbc);
+                gbc.gridx++;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(0, 0, 0, 0);
+                panel.add((timeLabel = new JLabel("Time: ")), gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(4, 4, 4, 4);
+                add(panel, gbc);
+
+                gbc.gridwidth = 1;
+                gbc.weightx = 0.25;
+                gbc.gridy++;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((showInfo = new JCheckBox("Start")), gbc);
+            }
+        }
+
+        private class RadioButtonPanel extends JPanel {
+            private ButtonGroup timeGroup;
+            private JRadioButton showTimeLabel;
+            private JRadioButton hideTimeLabel;
+            private JLabel label;
+
+            public RadioButtonPanel() {
+                setLayout(new GridBagLayout());
+                setBorder(new CompoundBorder(new TitledBorder("TIME VISIBLE"), new EmptyBorder(8, 0, 0, 0)));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.insets = new Insets(0, 0, 0, 4);
+                gbc.anchor = GridBagConstraints.WEST;
+
+                JPanel panel = new JPanel(new GridBagLayout());
+                panel.add((showTimeLabel = new JRadioButton("Show")), gbc);
+                gbc.gridy++;
+                panel.add((hideTimeLabel = new JRadioButton("Hide: ")), gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                panel.add((label = new JLabel("Some text")), gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(4, 4, 4, 4);
+                add(panel, gbc);
+            }
+        }
+
+        private class TextFieldPanel extends JPanel {
+            private JTextField textFieldN1;
+            private JTextField textFieldN2;
+
+            public TextFieldPanel() {
+                setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+
+                add(new JLabel("BigBird period (N1): "), gbc);
+                gbc.gridy++;
+                add(new JLabel("SmallBird period (N2): "), gbc);
+
+                gbc.gridx++;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+
+                add((textFieldN1 = new JTextField(10)), gbc);
+                gbc.gridy++;
+                add((textFieldN2 = new JTextField(10)), gbc);
+            }
+        }
+
+        private class ComboBoxListPanel extends JPanel {
+            private JComboBox comboBox;
+            private JList list;
+
+            public ComboBoxListPanel() {
+                setLayout(new GridBagLayout());
+                setBorder(new CompoundBorder(new TitledBorder("PARAMETERS P1, K"),
+                        new EmptyBorder(0, 0, 0, 0)));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(0, 0, 0, 4);
+
+                JPanel panel = new JPanel(new GridBagLayout());
+                panel.add(new JLabel("P1: "), gbc);
+                gbc.gridx++;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(0, 0, 0, 0);
+                panel.add((new JLabel("K: ")), gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(4, 4, 4, 4);
+                add(panel, gbc);
+
+                gbc.gridwidth = 1;
+                gbc.weightx = 0.25;
+                gbc.gridy++;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((comboBox = new JComboBox()), gbc);
+                gbc.gridwidth = 1;
+                gbc.weightx = 0.25;
+                gbc.gridx++;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((list = new JList()), gbc);
+            }
+        }
+
+        private class SliderPanel extends JPanel {
+            private JSlider sliderP1;
+            private JSlider sliderK;
+
+            public SliderPanel() {
+                setLayout(new GridBagLayout());
+                setBorder(new CompoundBorder(new TitledBorder("PARAMETERS P1, K"),
+                        new EmptyBorder(0, 0, 0, 0)));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(0, 0, 0, 4);
+
+                JPanel panel = new JPanel(new GridBagLayout());
+                panel.add(new JLabel("P1: "), gbc);
+                gbc.gridx++;
+                gbc.weightx = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(0, 0, 0, 0);
+                panel.add((new JLabel("K: ")), gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(4, 4, 4, 4);
+                add(panel, gbc);
+
+                gbc.gridwidth = 1;
+                gbc.weightx = 0.25;
+                gbc.gridy++;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((sliderP1 = new JSlider()), gbc);
+                gbc.gridwidth = 1;
+                gbc.weightx = 0.25;
+                gbc.gridx++;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                add((sliderK = new JSlider()), gbc);
+            }
+        }
+
+    }
+
+    //TODO
     private class InfoDialog extends JDialog {
 
         private JTextArea infoArea;
@@ -208,10 +396,10 @@ public class Window extends JFrame {
         private int DIALOG_WIDTH = 200;
         private int DIALOG_HEIGHT = 200;
 
-        public InfoDialog (String title) {
+        public InfoDialog(String title) {
             this.setTitle(title);
-            this.setBounds(SCREEN.width/2 + WINDOW_WIDTH/2, SCREEN.height/2 - WINDOW_HEIGHT/2, DIALOG_WIDTH, DIALOG_HEIGHT);
-            this.setLayout(new GridLayout(2,1));
+            this.setBounds(SCREEN_WIDTH / 2 + WINDOW_WIDTH / 2, SCREEN_HEIGHT / 2 - WINDOW_HEIGHT / 2, DIALOG_WIDTH, DIALOG_HEIGHT);
+            this.setLayout(new GridLayout(2, 1));
 
             infoArea = new JTextArea();
             infoArea.setBounds(0, 0, 100, 100);
@@ -238,6 +426,18 @@ public class Window extends JFrame {
             infoArea.setText(text);
         }
     }
+
+    //TODO
+    private class ErrorDialog extends JDialog {
+
+        private JTextArea infoArea;
+        private JButton buttonOK;
+        private JButton buttonCancel;
+        private int DIALOG_WIDTH = 200;
+        private int DIALOG_HEIGHT = 200;
+
+        public ErrorDialog() {
+
+        }
+    }
 }
-
-

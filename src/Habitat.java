@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Habitat extends JComponent {
+public class Habitat extends JPanel {
     private long BEGIN_TIME = 0;
     private long END_TIME = 0;
     private long LAST_BIG_BIRD_TIME = 0;
@@ -13,13 +13,13 @@ public class Habitat extends JComponent {
 
     private Timer timer = null;
 
-    private int N1 = 500;
-    private int N2 = 500;
+    private int N1 = 2000;
+    private int N2 = 2000;
     private double P1 = 1;
     private double K = 0.5;
     private int PERIOD = 100;
 
-    public Habitat() {
+    public Habitat(int N1, int N2, double P1, double K) {
         this.N1 = N1;
         this.N2 = N2;
         this.P1 = P1;
@@ -43,6 +43,22 @@ public class Habitat extends JComponent {
 
     public void setK(double k) {
         K = k;
+    }
+
+    public int getN1() {
+        return N1;
+    }
+
+    public int getN2() {
+        return N2;
+    }
+
+    public double getP1() {
+        return P1;
+    }
+
+    public double getK() {
+        return K;
     }
 
     public void setPERIOD(int PERIOD) {

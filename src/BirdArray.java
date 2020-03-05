@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.Vector;
 
 public class BirdArray {
-    private static BirdArray birdArray;
+    private static volatile  BirdArray birdArray;
     private static Vector<Bird> array = new Vector<Bird>();
     private BirdArray() {}
 
