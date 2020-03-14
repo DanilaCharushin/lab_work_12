@@ -3,13 +3,19 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+enum STATE {
+    RUNNING,
+    STOPPED,
+    PAUSED,
+}
+
 public class Habitat extends JPanel {
     private long BEGIN_TIME = 0;
     private long END_TIME = 0;
     private long LAST_BIG_BIRD_TIME = 0;
     private long LAST_SMALL_BIRD_TIME = 0;
     private BirdFactory birdFactory;
-    private boolean IS_RUNNING = false;
+    private STATE state = STATE.STOPPED;
 
     private Timer timer = null;
 
@@ -19,12 +25,13 @@ public class Habitat extends JPanel {
     private double K = 0.5;
     private int PERIOD = 100;
 
+    private String info = "";
+
     public Habitat(int N1, int N2, double P1, double K) {
         this.N1 = N1;
         this.N2 = N2;
         this.P1 = P1;
         this.K = K;
-        this.PERIOD = PERIOD;
         BigBird.SET_IMAGE("res/BigBird.png");
         SmallBird.SET_IMAGE("res/SmallBird.png");
     }
@@ -61,7 +68,7 @@ public class Habitat extends JPanel {
         return K;
     }
 
-    public void setPERIOD(int PERIOD) {
+    public void setPeriod(int PERIOD) {
         this.PERIOD = PERIOD;
     }
 
@@ -94,30 +101,29 @@ public class Habitat extends JPanel {
         }
     }
 
-    public boolean beginSimulation() {
-        if (IS_RUNNING)
-            return false;
-        IS_RUNNING = true;
-
+    public void beginSimulation() {
+        state = STATE.RUNNING;
         BEGIN_TIME = System.currentTimeMillis() / PERIOD * PERIOD;
         runTimer();
-        return true;
     }
 
-    public boolean endSimulation() {
-        if (!IS_RUNNING)
-            return false;
-        IS_RUNNING = false;
+    public void endSimulation() {
+        state = STATE.STOPPED;
         timer.cancel();
+        info = calculateInfo();
         BirdArray.getBirdArray().removeAllBirds();
-        return true;
+        BigBird.ZERO_COUNT();
+        SmallBird.ZERO_COUNT();
     }
 
     public void pauseSimulation() {
+        state = STATE.PAUSED;
         timer.cancel();
+        info = calculateInfo();
     }
 
     public void continueSimulation() {
+        state = STATE.RUNNING;
         runTimer();
     }
 
@@ -137,7 +143,11 @@ public class Habitat extends JPanel {
         return PERIOD;
     }
 
-    public String getInfo() {
+    public STATE getState() {
+        return state;
+    }
+
+    private String calculateInfo() {
         String resStr = "";
         resStr += "Время симуляции: ";
         resStr += (END_TIME - BEGIN_TIME) / 1000.0;
@@ -147,9 +157,11 @@ public class Habitat extends JPanel {
         resStr += SmallBird.GET_COUNT();
         resStr += "\nБольших: ";
         resStr += BigBird.GET_COUNT();
-        BigBird.ZERO_COUNT();
-        SmallBird.ZERO_COUNT();
         return resStr;
+    }
+
+    public String getInfo() {
+        return info;
     }
 
     public String getTime() {

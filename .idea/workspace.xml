@@ -3,17 +3,24 @@
   <component name="ChangeListManager">
     <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/BirdArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdArray.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/META-INF/Java.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$RadioButtonPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$RadioButtonPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$SliderPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$SliderPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$TextFieldPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$TextFieldPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BirdArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,6 +55,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
@@ -130,7 +138,26 @@
       <workItem from="1582874347022" duration="2182000" />
       <workItem from="1582965277095" duration="2063000" />
       <workItem from="1583208152953" duration="66000" />
-      <workItem from="1583392669844" duration="4636000" />
+      <workItem from="1583392669844" duration="5466000" />
+      <workItem from="1583403973192" duration="5063000" />
+      <workItem from="1583425725877" duration="172000" />
+      <workItem from="1583426546080" duration="3379000" />
+      <workItem from="1583491384919" duration="4303000" />
+      <workItem from="1583512031997" duration="705000" />
+      <workItem from="1583568214805" duration="2939000" />
+      <workItem from="1583830365703" duration="4590000" />
+      <workItem from="1583853543711" duration="3438000" />
+      <workItem from="1583904042294" duration="2224000" />
+      <workItem from="1583982202476" duration="2329000" />
+      <workItem from="1584000479344" duration="3031000" />
+      <workItem from="1584005057381" duration="2805000" />
+      <workItem from="1584085745917" duration="4960000" />
+      <workItem from="1584111153371" duration="1004000" />
+      <workItem from="1584151617367" duration="116000" />
+      <workItem from="1584151787387" duration="133000" />
+      <workItem from="1584151955647" duration="66000" />
+      <workItem from="1584152199123" duration="103000" />
+      <workItem from="1584152510457" duration="2553000" />
     </task>
     <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
       <created>1581862107011</created>

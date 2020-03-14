@@ -12,6 +12,13 @@ public class Main
 {
     public static void main(String args[])
     {
-        new Window(700,500);
+        EventQueue.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                ex.printStackTrace();
+            }
+            new Window(700,500);
+        });
     }
 }
