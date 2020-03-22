@@ -50,12 +50,6 @@ public class Window extends JFrame {
         timeLabel = new JLabel("Time: ");
         habitat = new Habitat(1000, 1000, 1, 1);
         controlPanel = new ControlPanel();
-        controlPanel.getTextFieldPanel().getTextFieldN1().setText("1000");
-        controlPanel.getTextFieldPanel().getTextFieldN2().setText("1000");
-        controlPanel.getComboBoxListPanel().getComboBoxP1().setSelectedIndex(10);
-        controlPanel.getComboBoxListPanel().getListK().setSelectedIndex(10);
-        controlPanel.getSliderPanel().getSliderP1().setValue(100);
-        controlPanel.getSliderPanel().getSliderK().setValue(100);
 
         add(controlPanel, BorderLayout.WEST);
         add(habitat, BorderLayout.CENTER);
@@ -101,18 +95,50 @@ public class Window extends JFrame {
             try {
                 habitat.setN1(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldN1().getText()));
             } catch (NumberFormatException ex) {
-                new ErrorDialog("Некорректный формат");
+                new ErrorDialog("N1 field must be an integer!");
+                controlPanel.getTextFieldPanel().getTextFieldN1().setText(controlPanel.getTextFieldPanel().getDefaultText());
             }
             requestFocusInWindow();
         });
-
         controlPanel.getTextFieldPanel().getTextFieldN2().addActionListener(actionEvent -> {
             try {
                 habitat.setN2(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldN2().getText()));
             } catch (NumberFormatException ex) {
-                new ErrorDialog("Некорректный формат");
+                new ErrorDialog("N2 field must be an integer!");
+                controlPanel.getTextFieldPanel().getTextFieldN2().setText(controlPanel.getTextFieldPanel().getDefaultText());
             }
             requestFocusInWindow();
+        });
+
+        controlPanel.getTextFieldPanel().getTextFieldN1().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {}
+
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
+                try {
+                    habitat.setN1(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldN1().getText()));
+                } catch (NumberFormatException ex) {
+                    new ErrorDialog("N1 field must be an integer!");
+                    controlPanel.getTextFieldPanel().getTextFieldN1().setText(controlPanel.getTextFieldPanel().getDefaultText());
+                }
+                Window.this.requestFocusInWindow();
+            }
+        });
+        controlPanel.getTextFieldPanel().getTextFieldN2().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {}
+
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
+                try {
+                    habitat.setN2(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldN2().getText()));
+                } catch (NumberFormatException ex) {
+                    new ErrorDialog("N2 field must be an integer!");
+                    controlPanel.getTextFieldPanel().getTextFieldN2().setText(controlPanel.getTextFieldPanel().getDefaultText());
+                }
+                Window.this.requestFocusInWindow();
+            }
         });
 
         controlPanel.getComboBoxListPanel().getComboBoxP1().addActionListener(actionEvent -> {
@@ -120,7 +146,6 @@ public class Window extends JFrame {
             habitat.setP1(value);
             controlPanel.getSliderPanel().getSliderP1().setValue((int) (value * 100));
         });
-
         controlPanel.getComboBoxListPanel().getListK().addListSelectionListener(listSelectionEvent -> {
             double value = Double.parseDouble((String) controlPanel.getComboBoxListPanel().getListK().getSelectedValue());
             habitat.setK(value);
@@ -132,7 +157,6 @@ public class Window extends JFrame {
             habitat.setP1(value);
             controlPanel.getComboBoxListPanel().getComboBoxP1().setSelectedIndex((int) (value * 10));
         });
-
         controlPanel.getSliderPanel().getSliderK().addChangeListener(stateChanged -> {
             double value = controlPanel.getSliderPanel().getSliderK().getValue() / 100.0;
             habitat.setK(value);
@@ -143,7 +167,6 @@ public class Window extends JFrame {
             TIME_LABEL_VISIBLE = true;
             timeLabel.setVisible(TIME_LABEL_VISIBLE);
         });
-
         controlPanel.getRadioButtonPanel().getHideTimeLabel().addActionListener(actionEvent -> {
             TIME_LABEL_VISIBLE = false;
             timeLabel.setVisible(TIME_LABEL_VISIBLE);
@@ -242,7 +265,6 @@ public class Window extends JFrame {
         }
     }
 
-
     private class ControlPanel extends JPanel {
         private ButtonPanel buttonPanel;
         private CheckBoxPanel checkBoxPanel;
@@ -275,6 +297,7 @@ public class Window extends JFrame {
             gbc.gridy++;
             add((sliderPanel = new SliderPanel()), gbc);
         }
+
         private class ButtonPanel extends JPanel {
             private JButton buttonStart;
             private JButton buttonStop;
@@ -341,6 +364,7 @@ public class Window extends JFrame {
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 checkBox = new JCheckBox("Show info");
                 checkBox.setFocusable(false);
+                checkBox.setSelected(true);
                 add(checkBox, gbc);
             }
 
@@ -391,6 +415,7 @@ public class Window extends JFrame {
         private class TextFieldPanel extends JPanel {
             private JTextField textFieldN1;
             private JTextField textFieldN2;
+            final private String defaultText = "1000";
 
             public TextFieldPanel() {
                 setLayout(new GridBagLayout());
@@ -400,18 +425,20 @@ public class Window extends JFrame {
                 gbc.gridy = 0;
                 gbc.anchor = GridBagConstraints.WEST;
 
-                add(new JLabel("BigBird period (N1): "), gbc);
+                add(new JLabel("BigBird period (N1), ms: "), gbc);
                 gbc.gridy++;
-                add(new JLabel("SmallBird period (N2): "), gbc);
+                add(new JLabel("SmallBird period (N2), ms: "), gbc);
 
                 gbc.gridx++;
                 gbc.gridy = 0;
                 gbc.weightx = 1;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 textFieldN1 = new JTextField(10);
+                textFieldN1.setText(defaultText);
                 add(textFieldN1, gbc);
                 gbc.gridy++;
                 textFieldN2 = new JTextField(10);
+                textFieldN2.setText(defaultText);
                 add(textFieldN2, gbc);
             }
 
@@ -421,6 +448,10 @@ public class Window extends JFrame {
 
             public JTextField getTextFieldN2() {
                 return textFieldN2;
+            }
+
+            public String getDefaultText() {
+                return defaultText;
             }
         }
 
@@ -441,6 +472,7 @@ public class Window extends JFrame {
                         comboBoxP1.addItem("0." + i);
                 }
                 comboBoxP1.setFocusable(false);
+                comboBoxP1.setSelectedIndex(10);
                 panelP1.add(comboBoxP1, BorderLayout.SOUTH);
 
                 JPanel panelK = new JPanel(new BorderLayout());
@@ -454,6 +486,7 @@ public class Window extends JFrame {
                     else
                         vector.add("0." + i);
                 }
+                listK.setSelectedIndex(10);
                 listK.setListData(vector);
                 listK.setFocusable(false);
                 JScrollPane scroll = new JScrollPane(listK);
@@ -495,6 +528,7 @@ public class Window extends JFrame {
 
                 sliderP1 = new JSlider();
                 sliderP1.setFocusable(false);
+                sliderP1.setValue(100);
                 panel.add(sliderP1, gbc);
                 gbc.gridy++;
 
@@ -503,6 +537,7 @@ public class Window extends JFrame {
 
                 sliderK = new JSlider();
                 sliderK.setFocusable(false);
+                sliderK.setValue(100);
                 panel.add(sliderK, gbc);
 
                 gbc.gridx = 0;
@@ -548,7 +583,6 @@ public class Window extends JFrame {
         }
 
     }
-
 
     private class InfoDialog extends JDialog {
 
@@ -601,7 +635,6 @@ public class Window extends JFrame {
             setVisible(true);
         }
     }
-
 
     private class ErrorDialog extends JDialog {
 
