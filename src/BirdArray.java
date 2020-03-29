@@ -1,10 +1,17 @@
-import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
+import java.util.*;
+
+/*
+    Коллекция для хранения объектов: LinkedList
+    Коллекция для хранения и поиска уникальных идентификаторов: TreeSet
+    Коллекция для хранения времени рождения объектов: HashMap
+*/
 
 public class BirdArray {
-    private static volatile  BirdArray birdArray;
-    private static Vector<Bird> array = new Vector<Bird>();
+    private static volatile BirdArray birdArray;
+    private static LinkedList<Bird> list = new LinkedList<Bird>();
+    private static TreeSet<Integer> set = new TreeSet<Integer>();
+    private static HashMap<Integer, String> map = new HashMap<Integer, String>();
     private BirdArray() {}
 
     public static synchronized BirdArray getBirdArray() {
@@ -14,17 +21,58 @@ public class BirdArray {
         return birdArray;
     }
 
-    public void addBird(Bird bird) {
-        array.addElement(bird);
+    public void addBird(Bird bird, String time) {
+        int id = bird.hashCode();
+        list.addLast(bird);
+        set.add(id);
+        map.put(id, time);
+        System.out.println("ADDED " + bird + ", HASH = " + id);
+    }
+
+    public void checkBirds(double timeLife1, double timeLife2, double time) {
+        Vector<Bird> birds = new Vector<Bird>();
+        for (Bird bird : list) {
+            double period = bird instanceof BigBird ? timeLife1 : timeLife2;
+            double bornTime = -1;
+            for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                System.out.println(entry.getKey() + ",  " + entry.getValue());
+                System.out.println("CHEKING " + bird + ", HASH = " + bird.hashCode());
+                if (entry.getKey() == bird.hashCode()) {
+                    System.out.println("TO REMOVE " + bird + ", HASH = " + (entry.getKey() == bird.hashCode()));
+                    bornTime = Double.parseDouble(entry.getValue());
+                    break;
+                }
+            }
+            if (bornTime + period == time) {
+                birds.addElement(bird);
+            }
+        }
+        for (Bird bird : birds) {
+            String bornTime = "";
+            for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                if (entry.getKey() == bird.hashCode()){
+                    bornTime = entry.getValue();
+                }
+            }
+            set.remove(bird.hashCode());
+            map.remove(bird.hashCode());
+            list.remove(bird);
+        }
     }
 
     public void paintBirds(Graphics g) {
-        for (Bird bird : array) {
+        for (Bird bird : list) {
             bird.drawBird(g);
         }
     }
 
     public void removeAllBirds() {
-        array.removeAllElements();
+        list.clear();
+        map.clear();
+        set.clear();
+    }
+
+    public HashMap<Integer, String> getMap() {
+        return map;
     }
 }

@@ -1,19 +1,8 @@
-import javafx.scene.control.ComboBox;
-
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.Timer;
-import java.util.Vector;
-import java.util.concurrent.Flow;
 
 public class Window extends JFrame {
 
@@ -54,6 +43,8 @@ public class Window extends JFrame {
         add(controlPanel, BorderLayout.WEST);
         add(habitat, BorderLayout.CENTER);
         add(timeLabel, BorderLayout.SOUTH);
+
+
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -141,6 +132,58 @@ public class Window extends JFrame {
             }
         });
 
+        controlPanel.getTextFieldPanel().getTextFieldTimeLife1().addActionListener(actionEvent -> {
+            try {
+                habitat.setTimeLife1(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldTimeLife1().getText()));
+            } catch (NumberFormatException ex) {
+                new ErrorDialog("TimeLife1 field must be an integer!");
+                controlPanel.getTextFieldPanel().getTextFieldTimeLife1().setText(controlPanel.getTextFieldPanel().getDefaultText());
+            }
+            requestFocusInWindow();
+        });
+        controlPanel.getTextFieldPanel().getTextFieldTimeLife2().addActionListener(actionEvent -> {
+            try {
+                habitat.setTimeLife2(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldTimeLife2().getText()));
+            } catch (NumberFormatException ex) {
+                new ErrorDialog("TimeLife2 field must be an integer!");
+                controlPanel.getTextFieldPanel().getTextFieldTimeLife2().setText(controlPanel.getTextFieldPanel().getDefaultText());
+            }
+            requestFocusInWindow();
+        });
+
+        controlPanel.getTextFieldPanel().getTextFieldTimeLife1().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {}
+
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
+                try {
+                    habitat.setTimeLife1(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldTimeLife1().getText()));
+                } catch (NumberFormatException ex) {
+                    new ErrorDialog("TimeLife1 field must be an integer!");
+                    controlPanel.getTextFieldPanel().getTextFieldTimeLife1().setText(controlPanel.getTextFieldPanel().getDefaultText());
+                }
+                Window.this.requestFocusInWindow();
+            }
+        });
+        controlPanel.getTextFieldPanel().getTextFieldTimeLife2().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {}
+
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
+                try {
+                    habitat.setTimeLife2(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldTimeLife2().getText()));
+                } catch (NumberFormatException ex) {
+                    new ErrorDialog("TimeLife2 field must be an integer!");
+                    controlPanel.getTextFieldPanel().getTextFieldTimeLife2().setText(controlPanel.getTextFieldPanel().getDefaultText());
+                }
+                Window.this.requestFocusInWindow();
+            }
+        });
+
+
+
         controlPanel.getComboBoxListPanel().getComboBoxP1().addActionListener(actionEvent -> {
             double value = Double.parseDouble((String) controlPanel.getComboBoxListPanel().getComboBoxP1().getSelectedItem());
             habitat.setP1(value);
@@ -163,6 +206,8 @@ public class Window extends JFrame {
             controlPanel.getComboBoxListPanel().getListK().setSelectedIndex((int) (value * 10));
         });
 
+
+
         controlPanel.getRadioButtonPanel().getShowTimeLabel().addActionListener(actionEvent -> {
             TIME_LABEL_VISIBLE = true;
             timeLabel.setVisible(TIME_LABEL_VISIBLE);
@@ -180,6 +225,11 @@ public class Window extends JFrame {
             else
                 CONTINUE();
         });
+        controlPanel.getButtonPanel().getButtonCurrentBirds().addActionListener(actionEvent -> {
+            if (habitat.getState() != STATE.STOPPED) {
+                new CurrentBirdsDialog(BirdArray.getBirdArray().getMap());
+            }
+        });
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -193,13 +243,13 @@ public class Window extends JFrame {
         setVisible(true);
     }
 
-
     private void START() {
         if (habitat.getState() == STATE.STOPPED) {
             habitat.beginSimulation();
             controlPanel.getButtonPanel().getButtonStart().setEnabled(false);
             controlPanel.getButtonPanel().getButtonStop().setEnabled(true);
             controlPanel.getButtonPanel().getButtonPauseContinue().setEnabled(true);
+            controlPanel.getButtonPanel().getButtonCurrentBirds().setEnabled(true);
             controlPanel.getButtonPanel().getButtonPauseContinue().setText("Pause");
             runTimer();
         }
@@ -227,6 +277,7 @@ public class Window extends JFrame {
                 controlPanel.getButtonPanel().getButtonStart().setEnabled(false);
                 controlPanel.getButtonPanel().getButtonStop().setEnabled(false);
                 controlPanel.getButtonPanel().getButtonPauseContinue().setEnabled(false);
+                controlPanel.getButtonPanel().getButtonCurrentBirds().setEnabled(false);
                 controlPanel.getButtonPanel().getButtonPauseContinue().setText("Pause/Continue");
                 new InfoDialog();
             }
@@ -244,7 +295,6 @@ public class Window extends JFrame {
             }
         }, 0, habitat.getPeriod());
     }
-
 
     private class MenuBar extends JMenuBar {
         public MenuBar() {
@@ -302,6 +352,7 @@ public class Window extends JFrame {
             private JButton buttonStart;
             private JButton buttonStop;
             private JButton buttonPauseContinue;
+            private JButton buttonCurrentBirds;
 
             public ButtonPanel() {
                 setLayout(new GridBagLayout());
@@ -318,6 +369,10 @@ public class Window extends JFrame {
                 buttonPauseContinue.setFocusable(false);
                 buttonPauseContinue.setEnabled(false);
 
+                buttonCurrentBirds = new JButton("Current birds");
+                buttonCurrentBirds.setFocusable(false);
+                buttonCurrentBirds.setEnabled(false);
+
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -333,6 +388,8 @@ public class Window extends JFrame {
                 add(buttonStop, gbc);
                 gbc.gridx++;
                 add(buttonPauseContinue, gbc);
+                gbc.gridx++;
+                add(buttonCurrentBirds, gbc);
             }
 
             public JButton getButtonStart() {
@@ -343,6 +400,9 @@ public class Window extends JFrame {
             }
             public JButton getButtonPauseContinue() {
                 return buttonPauseContinue;
+            }
+            public JButton getButtonCurrentBirds() {
+                return buttonCurrentBirds;
             }
         }
 
@@ -415,6 +475,8 @@ public class Window extends JFrame {
         private class TextFieldPanel extends JPanel {
             private JTextField textFieldN1;
             private JTextField textFieldN2;
+            private JTextField textFieldTimeLife1;
+            private JTextField textFieldTimeLife2;
             final private String defaultText = "1000";
 
             public TextFieldPanel() {
@@ -428,18 +490,34 @@ public class Window extends JFrame {
                 add(new JLabel("BigBird period (N1), ms: "), gbc);
                 gbc.gridy++;
                 add(new JLabel("SmallBird period (N2), ms: "), gbc);
+                gbc.gridy++;
+                add(new JLabel("BigBird TimeLife, ms: "), gbc);
+                gbc.gridy++;
+                add(new JLabel("SmallBird TimeLife, ms: "), gbc);
 
                 gbc.gridx++;
                 gbc.gridy = 0;
                 gbc.weightx = 1;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
+
                 textFieldN1 = new JTextField(10);
                 textFieldN1.setText(defaultText);
                 add(textFieldN1, gbc);
+
                 gbc.gridy++;
                 textFieldN2 = new JTextField(10);
                 textFieldN2.setText(defaultText);
                 add(textFieldN2, gbc);
+
+                gbc.gridy++;
+                textFieldTimeLife1 = new JTextField(10);
+                textFieldTimeLife1.setText(defaultText);
+                add(textFieldTimeLife1, gbc);
+
+                gbc.gridy++;
+                textFieldTimeLife2 = new JTextField(10);
+                textFieldTimeLife2.setText(defaultText);
+                add(textFieldTimeLife2, gbc);
             }
 
             public JTextField getTextFieldN1() {
@@ -448,6 +526,14 @@ public class Window extends JFrame {
 
             public JTextField getTextFieldN2() {
                 return textFieldN2;
+            }
+
+            public JTextField getTextFieldTimeLife1() {
+                return textFieldTimeLife1;
+            }
+
+            public JTextField getTextFieldTimeLife2() {
+                return textFieldTimeLife2;
             }
 
             public String getDefaultText() {
@@ -585,7 +671,6 @@ public class Window extends JFrame {
     }
 
     private class InfoDialog extends JDialog {
-
         private JTextArea infoArea;
         private JButton buttonOK;
         private JButton buttonCancel;
@@ -637,13 +722,13 @@ public class Window extends JFrame {
     }
 
     private class ErrorDialog extends JDialog {
-
         private JButton buttonOK;
         private int DIALOG_WIDTH = 200;
         private int DIALOG_HEIGHT = 200;
 
         public ErrorDialog(String message) {
             setTitle("ERROR");
+            setModal(true);
             setBounds(
                     SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
                     SCREEN_HEIGHT / 2 - DIALOG_HEIGHT / 2,
@@ -658,6 +743,49 @@ public class Window extends JFrame {
             buttonOK.addActionListener(actionEvent -> {
                 setVisible(false);
             });
+            setVisible(true);
+        }
+    }
+
+    private class CurrentBirdsDialog extends JDialog {
+        private JTextArea infoArea;
+        private JButton buttonOK;
+        private int DIALOG_WIDTH = 200;
+        private int DIALOG_HEIGHT = 40;
+
+        public CurrentBirdsDialog(HashMap<Integer, String> map) {
+            setTitle("INFO");
+            setModal(true);
+            int COUNT = map.size();
+            setBounds(
+                    SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
+                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT * COUNT / 2,
+                    DIALOG_WIDTH,
+                    DIALOG_HEIGHT * COUNT
+            );
+            setLayout(new GridLayout(2, 1));
+            setBackground(new Color(222,222,222));
+            infoArea = new JTextArea();
+            infoArea.setBounds(0, 0, 100, 100);
+            infoArea.setBackground(new Color(222,222,222));
+            infoArea.setFont(new Font("Helvetica", Font.ITALIC, 12));
+            infoArea.setFocusable(false);
+
+            String text = "Alive birds:\n";
+
+            for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                text += ("id: " + entry.getKey() + ", born time: " + entry.getValue() + "\n");
+            }
+
+            buttonOK = new JButton("OK");
+            buttonOK.addActionListener(actionEvent -> {
+                CurrentBirdsDialog.this.dispose();
+            });
+
+            add(infoArea);
+            add(buttonOK);
+
+            infoArea.setText(text);
             setVisible(true);
         }
     }

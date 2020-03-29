@@ -19,11 +19,13 @@ public class Habitat extends JPanel {
 
     private Timer timer = null;
 
-    private int N1 = 2000;
-    private int N2 = 2000;
+    private int N1 = 1000;
+    private int N2 = 1000;
     private double P1 = 1;
-    private double K = 0.5;
+    private double K = 1;
     private int PERIOD = 100;
+    private int timeLife1 = 1000;
+    private int timeLife2 = 1000;
 
     private String info = "";
 
@@ -52,6 +54,22 @@ public class Habitat extends JPanel {
         K = k;
     }
 
+    public void setTimeLife1(int timeLife1) {
+        this.timeLife1 = timeLife1;
+    }
+
+    public void setTimeLife2(int timeLife2) {
+        this.timeLife2 = timeLife2;
+    }
+
+    public int getTimeLife1()  {
+        return timeLife1;
+    }
+
+    public int getTimeLife2() {
+        return timeLife2;
+    }
+
     public int getN1() {
         return N1;
     }
@@ -76,6 +94,8 @@ public class Habitat extends JPanel {
         int WIDTH = this.getWidth();
         int HEIGHT = this.getHeight();
 
+        BirdArray.getBirdArray().checkBirds(timeLife1 / 1000.0, timeLife2 / 1000.0, time / 1000.0);
+
         if ((time - LAST_BIG_BIRD_TIME) % N1 == 0) {
             LAST_BIG_BIRD_TIME = time;
             if ((float) Math.random() <= P1 && P1 > 0) {
@@ -84,7 +104,7 @@ public class Habitat extends JPanel {
                 int imageHeight = BigBird.GET_IMAGE().getHeight(null);
                 int cordX = (int) (Math.random() * (WIDTH + 1 - imageWidth - 10));
                 int cordY = (int) (Math.random() * (HEIGHT + 1 - imageHeight - 50));
-                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY));
+                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY), "" + time / 1000.0);
             }
         }
 
@@ -96,7 +116,7 @@ public class Habitat extends JPanel {
                 int imageHeight = SmallBird.GET_IMAGE().getHeight(null);
                 int cordX = (int) (Math.random() * (WIDTH + 1 - imageWidth - 10));
                 int cordY = (int) (Math.random() * (HEIGHT + 1 - imageHeight - 50));
-                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY));
+                BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY), "" + time / 1000.0);
             }
         }
     }

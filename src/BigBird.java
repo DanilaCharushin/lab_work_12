@@ -7,8 +7,7 @@ public class BigBird extends Bird
     private static int COUNT = 0;
 
     public BigBird(int cordX, int cordY) {
-        this.cordX = cordX;
-        this.cordY = cordY;
+        super(cordX, cordY);
         COUNT++;
     }
     public void drawBird(Graphics g) {

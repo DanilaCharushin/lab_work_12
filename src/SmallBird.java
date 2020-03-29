@@ -7,8 +7,7 @@ public class SmallBird extends Bird
     private static int COUNT = 0;
 
     public SmallBird(int cordX, int cordY) {
-        this.cordX = cordX;
-        this.cordY = cordY;
+        super(cordX, cordY);
         COUNT++;
     }
 
