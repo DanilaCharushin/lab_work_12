@@ -1,4 +1,4 @@
 public interface IBehaviour
 {
-    void move();
+    void move(int dX, int dY);
 }

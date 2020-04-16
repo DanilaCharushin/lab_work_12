@@ -10,11 +10,15 @@ enum STATE {
 }
 
 public class Habitat extends JPanel {
+
     private long BEGIN_TIME = 0;
     private long END_TIME = 0;
     private long LAST_BIG_BIRD_TIME = 0;
     private long LAST_SMALL_BIRD_TIME = 0;
+    private long LAST_T = 0;
     private BirdFactory birdFactory;
+    private BigBirdAI bigBirdAI;
+    private SmallBirdAI smallBirdAI;
     private STATE state = STATE.STOPPED;
 
     private Timer timer = null;
@@ -26,6 +30,7 @@ public class Habitat extends JPanel {
     private int PERIOD = 100;
     private int timeLife1 = 1000;
     private int timeLife2 = 1000;
+    private int T = 1000;
 
     private String info = "";
 
@@ -90,6 +95,22 @@ public class Habitat extends JPanel {
         this.PERIOD = PERIOD;
     }
 
+    public void setT(int T) {
+        this.T = T;
+    }
+
+    public int getT() {
+        return T;
+    }
+
+    public BigBirdAI getBigBirdAI() {
+        return bigBirdAI;
+    }
+
+    public SmallBirdAI getSmallBirdAI() {
+        return smallBirdAI;
+    }
+
     public void update(long time) {
         int WIDTH = this.getWidth();
         int HEIGHT = this.getHeight();
@@ -119,6 +140,13 @@ public class Habitat extends JPanel {
                 BirdArray.getBirdArray().addBird(birdFactory.createBird(cordX, cordY), "" + time / 1000.0);
             }
         }
+
+        if ((time - LAST_T) % T == 0) {
+            LAST_T = time;
+            int dX = (int) (Math.random() * (1+50)) - 25;
+            int dY = (int) (Math.random() * (1+50)) - 25;
+            BaseAI.SET_DIRECTION(dX, dY);
+        }
     }
 
     public void beginSimulation() {
@@ -130,6 +158,8 @@ public class Habitat extends JPanel {
     public void endSimulation() {
         state = STATE.STOPPED;
         timer.cancel();
+        bigBirdAI.interrupt();
+        smallBirdAI.interrupt();
         info = calculateInfo();
         BirdArray.getBirdArray().removeAllBirds();
         BigBird.ZERO_COUNT();
@@ -138,6 +168,8 @@ public class Habitat extends JPanel {
 
     public void pauseSimulation() {
         state = STATE.PAUSED;
+        bigBirdAI.pause();
+        smallBirdAI.pause();
         timer.cancel();
         info = calculateInfo();
     }
@@ -148,6 +180,12 @@ public class Habitat extends JPanel {
     }
 
     private void runTimer() {
+        bigBirdAI = new BigBirdAI();
+        bigBirdAI.continue_();
+        bigBirdAI.start();
+        smallBirdAI = new SmallBirdAI();
+        smallBirdAI.continue_();
+        smallBirdAI.start();
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

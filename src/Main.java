@@ -1,6 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
+
+/*
+* Взрослые и птенцы двигаются в одном направлении (в стае). Направление движения меняется с периодом T и выбирается случайно.
+*/
+
 public class Main
 {
     public static void main(String args[])

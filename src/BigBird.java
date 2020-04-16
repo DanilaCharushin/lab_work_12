@@ -15,8 +15,10 @@ public class BigBird extends Bird
 }
 
     @Override
-    public void move() {
-        System.out.println("BigBird moved");
+    public void move(int dX, int dY) {
+        cordX += dX;
+        cordY += dY;
+//        System.out.println("BigBird moved to (" + cordX + ";" + cordY + ")");
     }
 
     public static void SET_IMAGE(String imagePath) {

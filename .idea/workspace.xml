@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/BaseAI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/BigBirdAI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SmallBirdAI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Bird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Bird.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BirdArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdArray.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBird.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$1.class" afterDir="false" />
@@ -15,6 +18,8 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" afterDir="false" />
@@ -22,14 +27,15 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$SliderPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$SliderPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$TextFieldPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$TextFieldPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$CurrentBirdsDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$CurrentBirdsDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bird.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BirdArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IBehaviour.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SmallBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SmallBird.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
@@ -67,7 +73,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -182,7 +188,18 @@
       <workItem from="1585136681838" duration="2873000" />
       <workItem from="1585216820259" duration="765000" />
       <workItem from="1585296540132" duration="14644000" />
-      <workItem from="1585474044276" duration="6429000" />
+      <workItem from="1585474044276" duration="6887000" />
+      <workItem from="1585627876437" duration="7167000" />
+      <workItem from="1585803305532" duration="2758000" />
+      <workItem from="1585894788976" duration="1575000" />
+      <workItem from="1585971590845" duration="8051000" />
+      <workItem from="1586083320900" duration="3042000" />
+      <workItem from="1586531412303" duration="595000" />
+      <workItem from="1586753944715" duration="1827000" />
+      <workItem from="1586840994087" duration="11015000" />
+      <workItem from="1586935685932" duration="4174000" />
+      <workItem from="1586958654595" duration="696000" />
+      <workItem from="1587009057182" duration="2343000" />
     </task>
     <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
       <created>1581862107011</created>

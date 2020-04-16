@@ -44,8 +44,6 @@ public class Window extends JFrame {
         add(habitat, BorderLayout.CENTER);
         add(timeLabel, BorderLayout.SOUTH);
 
-
-
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
@@ -74,13 +72,17 @@ public class Window extends JFrame {
                         else
                             CONTINUE();
                         break;
+                    case  KeyEvent.VK_C:
+                        if (habitat.getState() != STATE.STOPPED) {
+                            new CurrentBirdsDialog(BirdArray.getBirdArray().getMap(), BirdArray.getBirdArray().getList());
+                        }
+                        break;
                     case KeyEvent.VK_ESCAPE:
                         System.exit(0);
                         break;
                 }
             }
         });
-
 
         controlPanel.getTextFieldPanel().getTextFieldN1().addActionListener(actionEvent -> {
             try {
@@ -182,7 +184,30 @@ public class Window extends JFrame {
             }
         });
 
+        controlPanel.getTextFieldPanel().getTextFieldT().addActionListener(actionEvent -> {
+            try {
+                habitat.setT(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldT().getText()));
+            } catch (NumberFormatException ex) {
+                new ErrorDialog("T field must be an integer!");
+                controlPanel.getTextFieldPanel().getTextFieldT().setText(controlPanel.getTextFieldPanel().getDefaultText());
+            }
+            requestFocusInWindow();
+        });
+        controlPanel.getTextFieldPanel().getTextFieldT().addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent focusEvent) {}
 
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
+                try {
+                    habitat.setT(Integer.parseInt(controlPanel.getTextFieldPanel().getTextFieldT().getText()));
+                } catch (NumberFormatException ex) {
+                    new ErrorDialog("T field must be an integer!");
+                    controlPanel.getTextFieldPanel().getTextFieldT().setText(controlPanel.getTextFieldPanel().getDefaultText());
+                }
+                Window.this.requestFocusInWindow();
+            }
+        });
 
         controlPanel.getComboBoxListPanel().getComboBoxP1().addActionListener(actionEvent -> {
             double value = Double.parseDouble((String) controlPanel.getComboBoxListPanel().getComboBoxP1().getSelectedItem());
@@ -195,6 +220,26 @@ public class Window extends JFrame {
             controlPanel.getSliderPanel().getSliderK().setValue((int) (value * 100));
         });
 
+        controlPanel.getComboBoxListPanel().getComboBoxPriorityBigAI().addActionListener(actionEvent -> {
+            try {
+                System.out.println("Big (pr before): " + habitat.getBigBirdAI().getPriority());
+                int value = controlPanel.getComboBoxListPanel().getComboBoxPriorityBigAI().getSelectedIndex();
+                habitat.getBigBirdAI().setPriority(value == 0 ? 1 : value * 5);
+                System.out.println("Big (pr after): " + habitat.getBigBirdAI().getPriority());
+            } catch (NullPointerException ex) {
+                new ErrorDialog("Please, start a simulation");
+            }
+        });
+        controlPanel.getComboBoxListPanel().getComboBoxPrioritySmallAI().addActionListener(actionEvent -> {
+            try {
+                System.out.println("Small (pr before): " + habitat.getSmallBirdAI().getPriority());
+                int value = controlPanel.getComboBoxListPanel().getComboBoxPrioritySmallAI().getSelectedIndex();
+                habitat.getSmallBirdAI().setPriority(value == 0 ? 1 : value * 5);
+                System.out.println("Small (pr after): " + habitat.getSmallBirdAI().getPriority());
+            } catch (NullPointerException ex) {
+                new ErrorDialog("Please, start a simulation");
+            }
+        });
         controlPanel.getSliderPanel().getSliderP1().addChangeListener(stateChanged -> {
             double value = controlPanel.getSliderPanel().getSliderP1().getValue() / 100.0;
             habitat.setP1(value);
@@ -205,8 +250,6 @@ public class Window extends JFrame {
             habitat.setK(value);
             controlPanel.getComboBoxListPanel().getListK().setSelectedIndex((int) (value * 10));
         });
-
-
 
         controlPanel.getRadioButtonPanel().getShowTimeLabel().addActionListener(actionEvent -> {
             TIME_LABEL_VISIBLE = true;
@@ -227,8 +270,16 @@ public class Window extends JFrame {
         });
         controlPanel.getButtonPanel().getButtonCurrentBirds().addActionListener(actionEvent -> {
             if (habitat.getState() != STATE.STOPPED) {
-                new CurrentBirdsDialog(BirdArray.getBirdArray().getMap());
+                new CurrentBirdsDialog(BirdArray.getBirdArray().getMap(), BirdArray.getBirdArray().getList());
             }
+        });
+        controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().addActionListener(actionEvent -> {
+            habitat.getBigBirdAI().changeState();
+            controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setText(habitat.getBigBirdAI().isRunning() ? "Pause AI big" : "Continue AI big");
+        });
+        controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().addActionListener(actionEvent -> {
+            habitat.getSmallBirdAI().changeState();
+            controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setText(habitat.getSmallBirdAI().isRunning() ? "Pause AI small" : "Continue AI small");
         });
 
         addMouseListener(new MouseAdapter() {
@@ -251,6 +302,10 @@ public class Window extends JFrame {
             controlPanel.getButtonPanel().getButtonPauseContinue().setEnabled(true);
             controlPanel.getButtonPanel().getButtonCurrentBirds().setEnabled(true);
             controlPanel.getButtonPanel().getButtonPauseContinue().setText("Pause");
+            controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setEnabled(true);
+            controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setText("Pause AI big");
+            controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setEnabled(true);
+            controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setText("Pause AI small");
             runTimer();
         }
     }
@@ -268,6 +323,10 @@ public class Window extends JFrame {
         controlPanel.getButtonPanel().getButtonStop().setEnabled(true);
         controlPanel.getButtonPanel().getButtonPauseContinue().setEnabled(true);
         controlPanel.getButtonPanel().getButtonPauseContinue().setText("Pause");
+        controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setEnabled(true);
+        controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setText("Pause AI big");
+        controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setEnabled(true);
+        controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setText("Pause AI small");
     }
 
     private void STOP() {
@@ -279,6 +338,10 @@ public class Window extends JFrame {
                 controlPanel.getButtonPanel().getButtonPauseContinue().setEnabled(false);
                 controlPanel.getButtonPanel().getButtonCurrentBirds().setEnabled(false);
                 controlPanel.getButtonPanel().getButtonPauseContinue().setText("Pause/Continue");
+                controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setEnabled(false);
+                controlPanel.getButtonPanel().getButtonPauseContinueBigBirdAI().setText("Pause/Continue AI big");
+                controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setEnabled(false);
+                controlPanel.getButtonPanel().getButtonPauseContinueSmallBirdAI().setText("Pause/Continue AI small");
                 new InfoDialog();
             }
             else
@@ -353,6 +416,8 @@ public class Window extends JFrame {
             private JButton buttonStop;
             private JButton buttonPauseContinue;
             private JButton buttonCurrentBirds;
+            private JButton buttonPauseContinueSmallBirdAI;
+            private JButton buttonPauseContinueBigBirdAI;
 
             public ButtonPanel() {
                 setLayout(new GridBagLayout());
@@ -373,6 +438,14 @@ public class Window extends JFrame {
                 buttonCurrentBirds.setFocusable(false);
                 buttonCurrentBirds.setEnabled(false);
 
+                buttonPauseContinueSmallBirdAI = new JButton("Pause/Continue AI small");
+                buttonPauseContinueSmallBirdAI.setFocusable(false);
+                buttonPauseContinueSmallBirdAI.setEnabled(false);
+
+                buttonPauseContinueBigBirdAI = new JButton("Pause/Continue AI big");
+                buttonPauseContinueBigBirdAI.setFocusable(false);
+                buttonPauseContinueBigBirdAI.setEnabled(false);
+
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -388,8 +461,15 @@ public class Window extends JFrame {
                 add(buttonStop, gbc);
                 gbc.gridx++;
                 add(buttonPauseContinue, gbc);
-                gbc.gridx++;
+
+                gbc.gridy++;
+                gbc.gridx = 0;
+
                 add(buttonCurrentBirds, gbc);
+                gbc.gridx++;
+                add(buttonPauseContinueBigBirdAI, gbc);
+                gbc.gridx++;
+                add(buttonPauseContinueSmallBirdAI, gbc);
             }
 
             public JButton getButtonStart() {
@@ -403,6 +483,12 @@ public class Window extends JFrame {
             }
             public JButton getButtonCurrentBirds() {
                 return buttonCurrentBirds;
+            }
+            public JButton getButtonPauseContinueBigBirdAI() {
+                return buttonPauseContinueBigBirdAI;
+            }
+            public JButton getButtonPauseContinueSmallBirdAI() {
+                return buttonPauseContinueSmallBirdAI;
             }
         }
 
@@ -477,6 +563,7 @@ public class Window extends JFrame {
             private JTextField textFieldN2;
             private JTextField textFieldTimeLife1;
             private JTextField textFieldTimeLife2;
+            private JTextField textFieldT;
             final private String defaultText = "1000";
 
             public TextFieldPanel() {
@@ -494,6 +581,8 @@ public class Window extends JFrame {
                 add(new JLabel("BigBird TimeLife, ms: "), gbc);
                 gbc.gridy++;
                 add(new JLabel("SmallBird TimeLife, ms: "), gbc);
+                gbc.gridy++;
+                add(new JLabel("AI period, ms: "), gbc);
 
                 gbc.gridx++;
                 gbc.gridy = 0;
@@ -518,6 +607,11 @@ public class Window extends JFrame {
                 textFieldTimeLife2 = new JTextField(10);
                 textFieldTimeLife2.setText(defaultText);
                 add(textFieldTimeLife2, gbc);
+
+                gbc.gridy++;
+                textFieldT = new JTextField(10);
+                textFieldT.setText(defaultText);
+                add(textFieldT, gbc);
             }
 
             public JTextField getTextFieldN1() {
@@ -536,6 +630,10 @@ public class Window extends JFrame {
                 return textFieldTimeLife2;
             }
 
+            public JTextField getTextFieldT() {
+                return textFieldT;
+            }
+
             public String getDefaultText() {
                 return defaultText;
             }
@@ -543,11 +641,38 @@ public class Window extends JFrame {
 
         private class ComboBoxListPanel extends JPanel {
             private JComboBox comboBoxP1;
+            private JComboBox comboBoxPriorityBigAI;
+            private JComboBox comboBoxPrioritySmallAI;
             private JList listK;
 
             public ComboBoxListPanel() {
                 setLayout(new BorderLayout());
                 setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+
+                JPanel panelPriority = new JPanel(new BorderLayout());
+                JPanel pr1 = new JPanel(new BorderLayout());
+                JPanel pr2 = new JPanel(new BorderLayout());
+                pr1.add(new JLabel("Big AI: "), BorderLayout.NORTH);
+                pr2.add(new JLabel("Small AI: "), BorderLayout.NORTH);
+                comboBoxPriorityBigAI = new JComboBox();
+                comboBoxPriorityBigAI.addItem("min priority");
+                comboBoxPriorityBigAI.addItem("norm priority");
+                comboBoxPriorityBigAI.addItem("max priority");
+                comboBoxPriorityBigAI.setFocusable(false);
+                comboBoxPriorityBigAI.setSelectedIndex(0);
+
+                comboBoxPrioritySmallAI = new JComboBox();
+                comboBoxPrioritySmallAI.addItem("min priority");
+                comboBoxPrioritySmallAI.addItem("norm priority");
+                comboBoxPrioritySmallAI.addItem("max priority");
+                comboBoxPrioritySmallAI.setFocusable(false);
+                comboBoxPrioritySmallAI.setSelectedIndex(0);
+
+                pr1.add(comboBoxPriorityBigAI, BorderLayout.SOUTH);
+                pr2.add(comboBoxPrioritySmallAI, BorderLayout.SOUTH);
+                panelPriority.add(pr1, BorderLayout.EAST);
+                panelPriority.add(pr2, BorderLayout.WEST);
+
                 JPanel panelP1 = new JPanel(new BorderLayout());
                 panelP1.add(new JLabel("P1: "), BorderLayout.NORTH);
                 comboBoxP1 = new JComboBox();
@@ -580,10 +705,19 @@ public class Window extends JFrame {
                 panelK.add(scroll, BorderLayout.CENTER);
                 add(panelP1, BorderLayout.WEST);
                 add(panelK, BorderLayout.EAST);
+                add(panelPriority, BorderLayout.CENTER);
             }
 
             public JComboBox getComboBoxP1() {
                 return comboBoxP1;
+            }
+
+            public JComboBox getComboBoxPriorityBigAI() {
+                return comboBoxPriorityBigAI;
+            }
+
+            public JComboBox getComboBoxPrioritySmallAI() {
+                return comboBoxPrioritySmallAI;
             }
 
             public JList getListK() {
@@ -701,12 +835,12 @@ public class Window extends JFrame {
             buttonPanel.add(buttonOK);
             buttonPanel.add(buttonCancel);
 
-            buttonOK.addActionListener(actionEvent -> {
+            buttonCancel.addActionListener(actionEvent -> {
                 CONTINUE();
                 dispose();
             });
 
-            buttonCancel.addActionListener(actionEvent -> {
+            buttonOK.addActionListener(actionEvent -> {
                 habitat.endSimulation();
                 controlPanel.getButtonPanel().getButtonStart().setEnabled(true);
                 controlPanel.getButtonPanel().getButtonStop().setEnabled(false);
@@ -751,9 +885,9 @@ public class Window extends JFrame {
         private JTextArea infoArea;
         private JButton buttonOK;
         private int DIALOG_WIDTH = 200;
-        private int DIALOG_HEIGHT = 40;
+        private int DIALOG_HEIGHT = 20;
 
-        public CurrentBirdsDialog(HashMap<Integer, String> map) {
+        public CurrentBirdsDialog(HashMap<Integer, String> map, LinkedList<Bird> list) {
             setTitle("INFO");
             setModal(true);
             int COUNT = map.size();
@@ -761,9 +895,9 @@ public class Window extends JFrame {
                     SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
                     SCREEN_HEIGHT / 2 - DIALOG_HEIGHT * COUNT / 2,
                     DIALOG_WIDTH,
-                    DIALOG_HEIGHT * COUNT
+                    DIALOG_HEIGHT * COUNT + 100
             );
-            setLayout(new GridLayout(2, 1));
+            setLayout(new BorderLayout());
             setBackground(new Color(222,222,222));
             infoArea = new JTextArea();
             infoArea.setBounds(0, 0, 100, 100);
@@ -771,10 +905,16 @@ public class Window extends JFrame {
             infoArea.setFont(new Font("Helvetica", Font.ITALIC, 12));
             infoArea.setFocusable(false);
 
-            String text = "Alive birds:\n";
+            String text = "Alive birds (" + map.size() + "):\n";
 
             for (Map.Entry<Integer, String> entry : map.entrySet()) {
-                text += ("id: " + entry.getKey() + ", born time: " + entry.getValue() + "\n");
+                Bird bird = null;
+                for (Bird b : list) {
+                    if (b.hashCode() == entry.getKey()) {
+                        bird = b;
+                    }
+                }
+                text += (bird.getClass() + ", id: " + entry.getKey() + ", born time: " + entry.getValue() + "\n");
             }
 
             buttonOK = new JButton("OK");
@@ -782,8 +922,8 @@ public class Window extends JFrame {
                 CurrentBirdsDialog.this.dispose();
             });
 
-            add(infoArea);
-            add(buttonOK);
+            add(infoArea, BorderLayout.CENTER);
+            add(buttonOK, BorderLayout.SOUTH);
 
             infoArea.setText(text);
             setVisible(true);
