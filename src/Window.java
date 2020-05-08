@@ -1,6 +1,11 @@
+import org.w3c.dom.ranges.DocumentRange;
+
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 import java.util.Timer;
 
@@ -354,7 +359,7 @@ public class Window extends JFrame {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                timeLabel.setText(habitat.getTime() );
+                timeLabel.setText(habitat.getTime());
             }
         }, 0, habitat.getPeriod());
     }
@@ -368,12 +373,31 @@ public class Window extends JFrame {
             menuRun.add("Pause").addActionListener(actionEvent -> PAUSE());
             menuRun.add("Continue").addActionListener(actionEvent -> CONTINUE());
 
+            JMenu menuConsole = new JMenu("Console");
+            menuConsole.setToolTipText("Click here to run terminal");
+            menuConsole.addMenuListener(new MenuListener() {
+                @Override
+                public void menuSelected(MenuEvent menuEvent) {;
+                    new ConsoleDialog();
+                }
+
+                @Override
+                public void menuDeselected(MenuEvent menuEvent) {
+
+                }
+
+                @Override
+                public void menuCanceled(MenuEvent menuEvent) {
+
+                }
+            });
             JMenu menuAbout = new JMenu("About");
             menuAbout.setToolTipText("Info about laboratory work");
             menuAbout.add("Author").addActionListener(actionEvent -> System.out.println("Danil Charushin"));
             menuAbout.add("Version").addActionListener(actionEvent -> System.out.println("v1.0"));
 
             add(menuRun);
+            add(menuConsole);
             add(menuAbout);
         }
     }
@@ -926,6 +950,47 @@ public class Window extends JFrame {
             add(buttonOK, BorderLayout.SOUTH);
 
             infoArea.setText(text);
+            setVisible(true);
+        }
+    }
+
+    private class ConsoleDialog extends JDialog {
+        private JTextArea infoArea;
+        private int DIALOG_WIDTH = 600;
+        private int DIALOG_HEIGHT = 300;
+
+        public ConsoleDialog() {
+            setTitle("CONSOLE");
+            setModal(false);
+            setBounds(
+                    0,
+                    0,
+                    DIALOG_WIDTH,
+                    DIALOG_HEIGHT
+            );
+            setLayout(new BorderLayout());
+            setBackground(new Color(222,222,222));
+            infoArea = new JTextArea();
+            infoArea.setBackground(new Color(222,222,222));
+            infoArea.setFont(new Font("Helvetica", Font.ITALIC, 12));
+            infoArea.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    String cmd = "setK ";
+                    if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+                        String in = infoArea.getText();
+                        infoArea.setText("");
+                        if (in.startsWith(cmd)) {
+                            double K = Double.parseDouble(in.substring(in.indexOf(" "), in.length()));
+                            infoArea.setText("Set: " + K);
+                            ObjectOutputStream oos = new ObjectOutputStream();
+                        }
+                        else
+                            infoArea.setText("Unknown command");
+                    }
+                }
+            });
+            add(infoArea, BorderLayout.CENTER);
             setVisible(true);
         }
     }

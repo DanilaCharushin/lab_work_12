@@ -2,17 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/BaseAI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BigBirdAI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SmallBirdAI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BaseAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BaseAI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBirdAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBirdAI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BirdArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdArray.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBird.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBirdAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBirdAI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$3.class" afterDir="false" />
@@ -20,6 +14,7 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$8.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" afterDir="false" />
@@ -32,12 +27,6 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BirdArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SmallBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SmallBird.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -69,6 +58,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/res" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -199,7 +194,15 @@
       <workItem from="1586840994087" duration="11015000" />
       <workItem from="1586935685932" duration="4174000" />
       <workItem from="1586958654595" duration="696000" />
-      <workItem from="1587009057182" duration="2343000" />
+      <workItem from="1587009057182" duration="4499000" />
+      <workItem from="1587528067465" duration="593000" />
+      <workItem from="1587999431098" duration="1605000" />
+      <workItem from="1588175177788" duration="756000" />
+      <workItem from="1588452808291" duration="733000" />
+      <workItem from="1588660008144" duration="256000" />
+      <workItem from="1588798559171" duration="3513000" />
+      <workItem from="1588841033927" duration="3826000" />
+      <workItem from="1588926248920" duration="572000" />
     </task>
     <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
       <created>1581862107011</created>
