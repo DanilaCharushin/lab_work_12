@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 
-public class SmallBird extends Bird
+public class SmallBird extends Bird implements Serializable
 {
     private static Image image;
     private static int COUNT = 0;
@@ -19,7 +20,6 @@ public class SmallBird extends Bird
     public void move(int dX, int dY) {
         cordX += dX;
         cordY += dY;
-//        System.out.println("SmallBird moved to (" + cordX + ";" + cordY + ")");
     }
 
     public static void SET_IMAGE(String imagePath) {

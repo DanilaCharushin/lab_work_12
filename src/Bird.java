@@ -1,6 +1,7 @@
 import java.awt.*;
+import java.io.Serializable;
 
-public abstract class Bird implements IBehaviour
+public abstract class Bird implements IBehaviour, Serializable
 {
     protected int cordX;
     protected int cordY;

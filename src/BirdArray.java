@@ -1,7 +1,8 @@
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
-public class BirdArray {
+public class BirdArray implements Serializable {
     private static volatile BirdArray birdArray;
     private static volatile LinkedList<Bird> list = new LinkedList<Bird>();
     private static TreeSet<Integer> set = new TreeSet<Integer>();
@@ -28,10 +29,7 @@ public class BirdArray {
             double period = bird instanceof BigBird ? timeLife1 : timeLife2;
             double bornTime = -1;
             for (Map.Entry<Integer, String> entry : map.entrySet()) {
-//                System.out.println(entry.getKey() + ",  " + entry.getValue());
-//                System.out.println("CHEKING " + bird + ", HASH = " + bird.hashCode());
                 if (entry.getKey() == bird.hashCode()) {
-//                    System.out.println("TO REMOVE " + bird + ", HASH = " + (entry.getKey() == bird.hashCode()));
                     bornTime = Double.parseDouble(entry.getValue());
                     break;
                 }
@@ -81,11 +79,30 @@ public class BirdArray {
         set.clear();
     }
 
-    public HashMap<Integer, String> getMap() {
+    public synchronized HashMap<Integer, String> getMap() {
         return map;
     }
 
-    public LinkedList<Bird> getList() {
+    public synchronized LinkedList<Bird> getList() {
         return list;
+    }
+
+    public synchronized TreeSet<Integer> getSet() {
+        return set;
+    }
+
+    public synchronized void setMap(HashMap<Integer, String> map, String time) {
+        this.map = map;
+        for (Map.Entry<Integer, String> entry : this.map.entrySet()) {
+            entry.setValue(time);
+        }
+    }
+
+    public synchronized void setList(LinkedList<Bird> list) {
+        this.list = list;
+    }
+
+    public synchronized void setSet(TreeSet<Integer> set) {
+        this.set = set;
     }
 }

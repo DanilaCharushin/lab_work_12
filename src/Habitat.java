@@ -41,6 +41,8 @@ public class Habitat extends JPanel {
         this.K = K;
         BigBird.SET_IMAGE("res/BigBird.png");
         SmallBird.SET_IMAGE("res/SmallBird.png");
+        bigBirdAI = new BigBirdAI();
+        smallBirdAI = new SmallBirdAI();
     }
 
     public void setN1(int n1) {

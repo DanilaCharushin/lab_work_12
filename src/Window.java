@@ -11,6 +11,9 @@ import java.util.Timer;
 
 public class Window extends JFrame {
 
+    final private String confFile = "conf/conf.txt";
+    final private String datFile = "conf/conf.dat";
+
     private boolean TIME_LABEL_VISIBLE = true;
     private int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
     private int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -44,6 +47,11 @@ public class Window extends JFrame {
         timeLabel = new JLabel("Time: ");
         habitat = new Habitat(1000, 1000, 1, 1);
         controlPanel = new ControlPanel();
+        try {
+            readConf(confFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         add(controlPanel, BorderLayout.WEST);
         add(habitat, BorderLayout.CENTER);
@@ -295,8 +303,133 @@ public class Window extends JFrame {
             }
         });
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    writeConf(confFile);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         requestFocusInWindow();
         setVisible(true);
+    }
+
+    private void readConf(String fileName) throws IOException {
+        BufferedInputStream is = new BufferedInputStream(new FileInputStream(fileName), 200);
+        int ch;
+        String line = "";
+        int id = 0;
+        while((ch = is.read()) != -1) {
+            if (!String.valueOf((char)ch).equals("\n")) {
+                line += String.valueOf((char)ch);
+            } else {
+                switch (id) {
+                    case 0:
+                        controlPanel.getCheckBoxPanel().getCheckBox().setSelected(line == "1" ? true : false);
+                        break;
+                    case 1:
+                        TIME_LABEL_VISIBLE = line == "1" ? true : false;
+                        if (TIME_LABEL_VISIBLE) {
+                            controlPanel.getRadioButtonPanel().getShowTimeLabel().setSelected(true);
+                        } else {
+                            controlPanel.getRadioButtonPanel().getHideTimeLabel().setSelected(true);
+                        }
+                        break;
+                    case 2:
+                        controlPanel.getTextFieldPanel().getTextFieldN1().setText(line);
+                        habitat.setN1(Integer.parseInt(line));
+                        break;
+                    case 3:
+                        controlPanel.getTextFieldPanel().getTextFieldN2().setText(line);
+                        habitat.setN2(Integer.parseInt(line));
+                        break;
+                    case 4:
+                        controlPanel.getTextFieldPanel().getTextFieldTimeLife1().setText(line);
+                        habitat.setTimeLife1(Integer.parseInt(line));
+                        break;
+                    case 5:
+                        controlPanel.getTextFieldPanel().getTextFieldTimeLife2().setText(line);
+                        habitat.setTimeLife2(Integer.parseInt(line));
+                        break;
+                    case 6:
+                        controlPanel.getTextFieldPanel().getTextFieldT().setText(line);
+                        habitat.setT(Integer.parseInt(line));
+                        break;
+                    case 7:
+                        controlPanel.getSliderPanel().getSliderP1().setValue(Integer.parseInt(line));
+                        controlPanel.getComboBoxListPanel().getComboBoxP1().setSelectedIndex(Integer.parseInt(line) / 10);
+                        habitat.setP1(Double.parseDouble(line) / 100.0);
+                        break;
+                    case 8:
+                        controlPanel.getSliderPanel().getSliderK().setValue(Integer.parseInt(line));
+                        controlPanel.getComboBoxListPanel().getListK().setSelectedIndex(Integer.parseInt(line) / 10);
+                        habitat.setK(Double.parseDouble(line) / 100.0);
+                        break;
+                    case 9:
+                        controlPanel.getComboBoxListPanel().getComboBoxPriorityBigAI().setSelectedIndex(Integer.parseInt(line));
+                        habitat.getBigBirdAI().setPriority(Integer.parseInt(line));
+                        break;
+                    case 10:
+                        controlPanel.getComboBoxListPanel().getComboBoxPrioritySmallAI().setSelectedIndex(Integer.parseInt(line));
+                        habitat.getSmallBirdAI().setPriority(Integer.parseInt(line));
+                        break;
+                }
+                line = "";
+                id++;
+            }
+        }
+        is.close();
+    }
+
+    private void writeConf(String fileName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(new File(fileName));
+        String conf = controlPanel.getCheckBoxPanel().getCheckBox().isSelected() ? "1\n" : "0\n";
+        conf += TIME_LABEL_VISIBLE ? "1\n" : "0\n";
+        conf += controlPanel.getTextFieldPanel().getTextFieldN1().getText() + '\n';
+        conf += controlPanel.getTextFieldPanel().getTextFieldN2().getText() + '\n';
+        conf += controlPanel.getTextFieldPanel().getTextFieldTimeLife1().getText() + '\n';
+        conf += controlPanel.getTextFieldPanel().getTextFieldTimeLife2().getText() + '\n';
+        conf += controlPanel.getTextFieldPanel().getTextFieldT().getText() + '\n';
+        conf += controlPanel.getSliderPanel().sliderP1.getValue() + "\n";
+        conf += controlPanel.getSliderPanel().sliderK.getValue() + "\n";
+        conf += controlPanel.getComboBoxListPanel().getComboBoxPriorityBigAI().getSelectedIndex() + "\n";
+        conf += controlPanel.getComboBoxListPanel().getComboBoxPrioritySmallAI().getSelectedIndex() + "\n";
+        fos.write(conf.getBytes());
+        fos.close();
+    }
+
+    private void UPLOAD(String fileName) {
+        System.out.println("U");
+        ObjectOutputStream oos;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(fileName));
+            oos.writeObject(BirdArray.getBirdArray().getMap());
+            oos.writeObject(BirdArray.getBirdArray().getSet());
+            oos.writeObject(BirdArray.getBirdArray().getList());
+            oos.close();
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void DOWNLOAD(String fileName) {
+        System.out.println("D");
+        ObjectInputStream ois;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(fileName));
+            BirdArray.getBirdArray().setMap((HashMap<Integer, String>) ois.readObject(), habitat.getTime());
+            BirdArray.getBirdArray().setSet((TreeSet<Integer>) ois.readObject());
+            BirdArray.getBirdArray().setList((LinkedList<Bird>) ois.readObject());
+            ois.close();
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void START() {
@@ -367,11 +500,13 @@ public class Window extends JFrame {
     private class MenuBar extends JMenuBar {
         public MenuBar() {
             JMenu menuRun = new JMenu("Run");
-            menuRun.setToolTipText("Run settings. start, stop, pause");
+            menuRun.setToolTipText("Run settings. start, stop, pause, upload, download");
             menuRun.add("Start").addActionListener(actionEvent -> START());
             menuRun.add("Stop").addActionListener(actionEvent -> STOP());
             menuRun.add("Pause").addActionListener(actionEvent -> PAUSE());
             menuRun.add("Continue").addActionListener(actionEvent -> CONTINUE());
+            menuRun.add("Upload").addActionListener(actionEvent -> UPLOAD(datFile));
+            menuRun.add("Download").addActionListener(actionEvent -> DOWNLOAD(datFile));
 
             JMenu menuConsole = new JMenu("Console");
             menuConsole.setToolTipText("Click here to run terminal");
@@ -909,17 +1044,16 @@ public class Window extends JFrame {
         private JTextArea infoArea;
         private JButton buttonOK;
         private int DIALOG_WIDTH = 200;
-        private int DIALOG_HEIGHT = 20;
+        private int DIALOG_HEIGHT = 200;
 
         public CurrentBirdsDialog(HashMap<Integer, String> map, LinkedList<Bird> list) {
             setTitle("INFO");
             setModal(true);
-            int COUNT = map.size();
             setBounds(
                     SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
-                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT * COUNT / 2,
+                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT / 2,
                     DIALOG_WIDTH,
-                    DIALOG_HEIGHT * COUNT + 100
+                    DIALOG_HEIGHT
             );
             setLayout(new BorderLayout());
             setBackground(new Color(222,222,222));
@@ -946,7 +1080,7 @@ public class Window extends JFrame {
                 CurrentBirdsDialog.this.dispose();
             });
 
-            add(infoArea, BorderLayout.CENTER);
+            add(new JScrollPane(infoArea), BorderLayout.CENTER);
             add(buttonOK, BorderLayout.SOUTH);
 
             infoArea.setText(text);
@@ -958,10 +1092,10 @@ public class Window extends JFrame {
         private JTextArea infoArea;
         private int DIALOG_WIDTH = 600;
         private int DIALOG_HEIGHT = 300;
-
         public ConsoleDialog() {
             setTitle("CONSOLE");
             setModal(false);
+            setAlwaysOnTop(true);
             setBounds(
                     0,
                     0,
@@ -970,27 +1104,87 @@ public class Window extends JFrame {
             );
             setLayout(new BorderLayout());
             setBackground(new Color(222,222,222));
+
+            PipedInputStream pis = new PipedInputStream();
+            PipedOutputStream pos = new PipedOutputStream();
+            try {
+                pis.connect(pos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             infoArea = new JTextArea();
             infoArea.setBackground(new Color(222,222,222));
-            infoArea.setFont(new Font("Helvetica", Font.ITALIC, 12));
+            infoArea.setFont(new Font("Helvetica", Font.ITALIC, 18));
+            infoArea.setText("-- BIRDS TERMINAL --\n");
             infoArea.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyTyped(KeyEvent e) {
-                    String cmd = "setK ";
                     if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                         String in = infoArea.getText();
-                        infoArea.setText("");
-                        if (in.startsWith(cmd)) {
-                            double K = Double.parseDouble(in.substring(in.indexOf(" "), in.length()));
-                            infoArea.setText("Set: " + K);
-                            ObjectOutputStream oos = new ObjectOutputStream();
+                        int index = in.substring(0, in.length() - 2).lastIndexOf('\n');
+                        String cmd = in.substring(index == -1 ? 0 : index, in.length() - 1);
+                        cmd = cmd.replace("\n", "");
+                        if (cmd.startsWith("setk ")) {
+                            int k = Integer.parseInt(cmd.substring(cmd.indexOf(" ") + 1));
+                            try {
+                                pos.write((byte) k);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            infoArea.append("Set k to " + k + "\n");
+                        } else if (cmd.startsWith("clear")) {
+                            infoArea.setText("-- BIRDS TERMINAL --\n");
+                        } else if (cmd.startsWith("exit")) {
+                            try {
+                                pis.close();
+                                pos.close();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            ConsoleDialog.this.dispose();
+                        } else {
+                            infoArea.append("Unknown command. Available: setk <k> | clear | exit\n");
                         }
-                        else
-                            infoArea.setText("Unknown command");
                     }
                 }
             });
-            add(infoArea, BorderLayout.CENTER);
+            Thread thread = new Thread(() -> {
+                while (true) {
+                    try {
+                        Thread.sleep(10);
+                        byte in[] = new byte[1];
+                        if (pis.available() > 0) {
+                            pis.read(in);
+                            int data = in[0];
+                            Window.this.habitat.setK(data / 100.0);
+                            controlPanel.getSliderPanel().getSliderK().setValue(data);
+                            controlPanel.getComboBoxListPanel().getListK().setSelectedIndex((int) (controlPanel.getSliderPanel().getSliderK().getValue()
+                                    / 10.0));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
+                    try {
+                        pis.close();
+                        pos.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            thread.setName("Console I/0 deamon");
+            thread.setDaemon(true);
+            thread.start();
+            add(new JScrollPane(infoArea), BorderLayout.CENTER);
             setVisible(true);
         }
     }
