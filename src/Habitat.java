@@ -10,7 +10,8 @@ enum STATE {
 }
 
 public class Habitat extends JPanel {
-
+    private long PAUSE_TIME = 0;
+    private long LAST_PAUSE = 0;
     private long BEGIN_TIME = 0;
     private long END_TIME = 0;
     private long LAST_BIG_BIRD_TIME = 0;
@@ -22,6 +23,7 @@ public class Habitat extends JPanel {
     private STATE state = STATE.STOPPED;
 
     private Timer timer = null;
+    private Thread pauseThread;
 
     private int N1 = 1000;
     private int N2 = 1000;
@@ -116,7 +118,6 @@ public class Habitat extends JPanel {
     public void update(long time) {
         int WIDTH = this.getWidth();
         int HEIGHT = this.getHeight();
-
         BirdArray.getBirdArray().checkBirds(timeLife1 / 1000.0, timeLife2 / 1000.0, time / 1000.0);
 
         if ((time - LAST_BIG_BIRD_TIME) % N1 == 0) {
@@ -154,6 +155,7 @@ public class Habitat extends JPanel {
     public void beginSimulation() {
         state = STATE.RUNNING;
         BEGIN_TIME = System.currentTimeMillis() / PERIOD * PERIOD;
+        LAST_PAUSE = 0;
         runTimer();
     }
 
@@ -169,11 +171,24 @@ public class Habitat extends JPanel {
     }
 
     public void pauseSimulation() {
+        LAST_PAUSE = PAUSE_TIME;
         state = STATE.PAUSED;
         bigBirdAI.pause();
         smallBirdAI.pause();
         timer.cancel();
         info = calculateInfo();
+        long START_PAUSE = System.currentTimeMillis() / PERIOD * PERIOD;
+        pauseThread = new Thread(() -> {
+            while (state == STATE.PAUSED) {
+                try {
+                    Thread.sleep(PERIOD);
+                    PAUSE_TIME = LAST_PAUSE + System.currentTimeMillis() / PERIOD * PERIOD - START_PAUSE;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        pauseThread.start();
     }
 
     public void continueSimulation() {
@@ -192,7 +207,7 @@ public class Habitat extends JPanel {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                END_TIME = System.currentTimeMillis() / PERIOD * PERIOD;
+                END_TIME = System.currentTimeMillis() / PERIOD * PERIOD - PAUSE_TIME;
                 update(END_TIME - BEGIN_TIME);
                 repaint();
             }
@@ -226,6 +241,10 @@ public class Habitat extends JPanel {
 
     public String getTime() {
         return "" + (END_TIME - BEGIN_TIME)/1000.0;
+    }
+
+    public double getDoubleTime() {
+        return (END_TIME - BEGIN_TIME)/1000.0;
     }
 
     @Override

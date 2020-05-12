@@ -36,6 +36,7 @@ public class BirdArray implements Serializable {
             }
             if (bornTime + period <= time) {
                 birds.addElement(bird);
+                System.out.println(bird);
             }
         }
         for (Bird bird : birds) {
@@ -91,18 +92,24 @@ public class BirdArray implements Serializable {
         return set;
     }
 
-    public synchronized void setMap(HashMap<Integer, String> map, String time) {
-        this.map = map;
-        for (Map.Entry<Integer, String> entry : this.map.entrySet()) {
-            entry.setValue(time);
+
+    public synchronized void setBirdArray(LinkedList<Bird> list, String time) {
+        for (Bird bird : list) {
+            this.addBird(bird, time);
         }
     }
-
-    public synchronized void setList(LinkedList<Bird> list) {
-        this.list = list;
-    }
-
-    public synchronized void setSet(TreeSet<Integer> set) {
-        this.set = set;
+    public synchronized void printInfo() {
+        System.out.println("-- LIST --");
+        for (Bird bird : list) {
+            System.out.println(bird);
+        }
+        System.out.println("-- SET --");
+        for (int n : set) {
+            System.out.println(n);
+        }
+        System.out.println("-- MAP --");
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
     }
 }

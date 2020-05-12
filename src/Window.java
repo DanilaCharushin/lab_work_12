@@ -6,6 +6,7 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 import java.util.Timer;
 
@@ -27,8 +28,18 @@ public class Window extends JFrame {
     private Timer timer;
     private Habitat habitat;
 
+    private String host = "localhost";
+    private String name;
+    private int port = 3000;
+    private Socket sock;
+    private DataOutputStream outStream;
+    private DataInputStream inStream;
+    public static LinkedList<String> hostList = new LinkedList<String>();
+
+    private boolean CONNECTED = false;
+
+
     public Window(int WIDTH, int HEIGHT) {
-        super("Крутые птички!!!");
         this.WINDOW_WIDTH = WIDTH;
         this.WINDOW_HEIGHT = HEIGHT;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,8 +58,21 @@ public class Window extends JFrame {
         timeLabel = new JLabel("Time: ");
         habitat = new Habitat(1000, 1000, 1, 1);
         controlPanel = new ControlPanel();
+
+        new NameDialog();
+        setTitle(name);
+
         try {
             readConf(confFile);
+        } catch (FileNotFoundException f) {
+            try {
+                FileOutputStream fos = new FileOutputStream(new File(confFile));
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,7 +115,7 @@ public class Window extends JFrame {
                         }
                         break;
                     case KeyEvent.VK_ESCAPE:
-                        System.exit(0);
+                        Window.this.dispose();
                         break;
                 }
             }
@@ -306,16 +330,58 @@ public class Window extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                if (CONNECTED)
+                    disconnect();
                 try {
+                    System.out.println("exit");
                     writeConf(confFile);
+                    System.exit(-5);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    new ErrorDialog("Conf.txt writing failed!");
+                }
+            }
+        });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (CONNECTED)
+                    disconnect();
+                try {
+                    System.out.println("exit");
+                    writeConf(confFile);
+                    System.exit(-5);
+                } catch (IOException ex) {
+                    new ErrorDialog("Conf.txt writing failed!");
                 }
             }
         });
 
         requestFocusInWindow();
         setVisible(true);
+    }
+
+    private void connect() {
+        try {
+            sock = new Socket(host, port);
+            outStream = new DataOutputStream(sock.getOutputStream());
+            inStream = new DataInputStream(sock.getInputStream());
+            CONNECTED = true;
+        } catch (IOException e) {
+            new ErrorDialog("Connection failed!");
+            System.exit(-5);
+        }
+    }
+
+    private void disconnect() {
+        try {
+            outStream.close();
+            inStream.close();
+            CONNECTED = false;
+        } catch (IOException e) {
+            new ErrorDialog("Disconnection failed!");
+        } catch (Exception ex) {
+            System.exit(-5);
+        }
     }
 
     private void readConf(String fileName) throws IOException {
@@ -329,10 +395,10 @@ public class Window extends JFrame {
             } else {
                 switch (id) {
                     case 0:
-                        controlPanel.getCheckBoxPanel().getCheckBox().setSelected(line == "1" ? true : false);
+                        controlPanel.getCheckBoxPanel().getCheckBox().setSelected(line.equals("1"));
                         break;
                     case 1:
-                        TIME_LABEL_VISIBLE = line == "1" ? true : false;
+                        TIME_LABEL_VISIBLE = line.equals("1");
                         if (TIME_LABEL_VISIBLE) {
                             controlPanel.getRadioButtonPanel().getShowTimeLabel().setSelected(true);
                         } else {
@@ -371,11 +437,11 @@ public class Window extends JFrame {
                         break;
                     case 9:
                         controlPanel.getComboBoxListPanel().getComboBoxPriorityBigAI().setSelectedIndex(Integer.parseInt(line));
-                        habitat.getBigBirdAI().setPriority(Integer.parseInt(line));
+                        habitat.getBigBirdAI().setPriority(Integer.parseInt(line) == 0 ? 1 : Integer.parseInt(line) * 5);
                         break;
                     case 10:
                         controlPanel.getComboBoxListPanel().getComboBoxPrioritySmallAI().setSelectedIndex(Integer.parseInt(line));
-                        habitat.getSmallBirdAI().setPriority(Integer.parseInt(line));
+                        habitat.getSmallBirdAI().setPriority(Integer.parseInt(line) == 0 ? 1 : Integer.parseInt(line) * 5);
                         break;
                 }
                 line = "";
@@ -402,29 +468,26 @@ public class Window extends JFrame {
         fos.close();
     }
 
-    private void UPLOAD(String fileName) {
-        System.out.println("U");
+    private void writeDat(String fileName) {
         ObjectOutputStream oos;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(fileName));
-            oos.writeObject(BirdArray.getBirdArray().getMap());
-            oos.writeObject(BirdArray.getBirdArray().getSet());
+            oos = new ObjectOutputStream(new FileOutputStream(fileName, false));
             oos.writeObject(BirdArray.getBirdArray().getList());
             oos.close();
         }
-        catch(Exception ex){
+        catch(Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    private void DOWNLOAD(String fileName) {
-        System.out.println("D");
+    private void readDat(String fileName) {
         ObjectInputStream ois;
         try {
             ois = new ObjectInputStream(new FileInputStream(fileName));
-            BirdArray.getBirdArray().setMap((HashMap<Integer, String>) ois.readObject(), habitat.getTime());
-            BirdArray.getBirdArray().setSet((TreeSet<Integer>) ois.readObject());
-            BirdArray.getBirdArray().setList((LinkedList<Bird>) ois.readObject());
+            System.out.println(habitat.getTime());
+            BirdArray.getBirdArray().removeAllBirds();
+            BirdArray.getBirdArray().setBirdArray((LinkedList<Bird>) ois.readObject(), "" + (habitat.getDoubleTime()));
+            habitat.repaint();
             ois.close();
         }
         catch(Exception ex){
@@ -505,8 +568,8 @@ public class Window extends JFrame {
             menuRun.add("Stop").addActionListener(actionEvent -> STOP());
             menuRun.add("Pause").addActionListener(actionEvent -> PAUSE());
             menuRun.add("Continue").addActionListener(actionEvent -> CONTINUE());
-            menuRun.add("Upload").addActionListener(actionEvent -> UPLOAD(datFile));
-            menuRun.add("Download").addActionListener(actionEvent -> DOWNLOAD(datFile));
+            menuRun.add("Write").addActionListener(actionEvent -> writeDat(datFile));
+            menuRun.add("Read").addActionListener(actionEvent -> readDat(datFile));
 
             JMenu menuConsole = new JMenu("Console");
             menuConsole.setToolTipText("Click here to run terminal");
@@ -526,6 +589,26 @@ public class Window extends JFrame {
 
                 }
             });
+
+            JMenu menuNetwork = new JMenu("Network");
+            menuNetwork.setToolTipText("Click here to networking");
+            menuNetwork.addMenuListener(new MenuListener() {
+                @Override
+                public void menuSelected(MenuEvent menuEvent) {;
+                    new NetworkDialog();
+                }
+
+                @Override
+                public void menuDeselected(MenuEvent menuEvent) {
+
+                }
+
+                @Override
+                public void menuCanceled(MenuEvent menuEvent) {
+
+                }
+            });
+
             JMenu menuAbout = new JMenu("About");
             menuAbout.setToolTipText("Info about laboratory work");
             menuAbout.add("Author").addActionListener(actionEvent -> System.out.println("Danil Charushin"));
@@ -533,6 +616,7 @@ public class Window extends JFrame {
 
             add(menuRun);
             add(menuConsole);
+            add(menuNetwork);
             add(menuAbout);
         }
     }
@@ -1093,7 +1177,7 @@ public class Window extends JFrame {
         private int DIALOG_WIDTH = 600;
         private int DIALOG_HEIGHT = 300;
         public ConsoleDialog() {
-            setTitle("CONSOLE");
+            setTitle("CONSOLE (" + name + ")");
             setModal(false);
             setAlwaysOnTop(true);
             setBounds(
@@ -1188,4 +1272,165 @@ public class Window extends JFrame {
             setVisible(true);
         }
     }
+
+    private class NameDialog extends JDialog {
+        private JButton buttonOK;
+        private int DIALOG_WIDTH = 200;
+        private int DIALOG_HEIGHT = 100;
+
+        public NameDialog() {
+            setTitle("WELCOME");
+            setModal(true);
+            setAlwaysOnTop(true);
+            setBounds(
+                    SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
+                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT / 2,
+                    DIALOG_WIDTH,
+                    DIALOG_HEIGHT
+            );
+            setLayout(new BorderLayout());
+
+            JLabel label = new JLabel("Name: ");
+            JTextField nameField = new JTextField();
+            nameField.addActionListener(ae -> {
+                name = nameField.getText();
+                System.out.println(name);
+                NameDialog.this.dispose();
+            });
+
+            buttonOK = new JButton("OK");
+            add(label, BorderLayout.NORTH);
+            add(buttonOK, BorderLayout.SOUTH);
+            buttonOK.addActionListener(actionEvent -> {
+                name = nameField.getText();
+                System.out.println(name);
+                NameDialog.this.dispose();
+            });
+            add(nameField, BorderLayout.CENTER);
+            setVisible(true);
+        }
+    }
+
+    private class NetworkDialog extends JDialog {
+        private JTextField textField;
+        private JButton buttonSEND;
+        private JButton buttonDISCONNECT;
+        private int DIALOG_WIDTH = 200;
+        private int DIALOG_HEIGHT = 100;
+        private String target = "";
+
+        public NetworkDialog() {
+            setTitle("NETWORK (" + name + ")");
+            setAlwaysOnTop(true);
+            setModal(false);
+            setBounds(
+                    SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
+                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT / 2,
+                    DIALOG_WIDTH,
+                    DIALOG_HEIGHT
+            );
+            setLayout(new BorderLayout());
+            setBackground(new Color(222,222,222));
+
+            JComboBox hosts = new JComboBox();
+            hosts.setFocusable(false);
+            connect();
+
+            try {
+                outStream.writeUTF(name);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Thread thread = new Thread(() -> {
+                try {
+                    while (true) {
+                        int action = inStream.readInt();
+                        switch (action) {
+                            case 0:
+                                hostList.clear();
+                                hosts.removeAllItems();
+                                int size = inStream.readInt();
+                                for (int i = 0; i < size; i++) {
+                                    hostList.addLast(inStream.readUTF());
+                                    hosts.addItem(Window.hostList.get(i));
+                                    System.out.println(hostList.get(i));
+                                }
+                                hosts.addItemListener(e -> {
+                                    System.out.println(e.getItem());
+                                    target = e.getItem().toString();
+                                });
+                                if (size > 0)
+                                    hosts.setSelectedIndex(0);
+                                if (size == 1) {
+                                    target = hosts.getItemAt(0).toString();
+                                }
+                                break;
+                            case 1:
+                                int data = inStream.readInt();
+                                System.out.println("k to set: " + data);
+                                Window.this.habitat.setK(data / 100.0);
+                                controlPanel.getSliderPanel().getSliderK().setValue(data);
+                                controlPanel.getComboBoxListPanel().getListK().setSelectedIndex((int) (controlPanel.getSliderPanel().getSliderK().getValue()
+                                        / 10.0));
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println(e);
+                }
+            });
+            thread.setDaemon(true);
+            thread.setName("Client updater");
+            thread.start();
+
+            textField = new JTextField();
+            textField.setText("");
+            buttonSEND = new JButton("Send");
+            buttonSEND.addActionListener(actionEvent -> {
+                int data = Integer.parseInt(textField.getText());
+                if (!target.equals("") && !textField.getText().equals("")) {
+                    try {
+                        System.out.println(target);
+                        System.out.println(data);
+                        outStream.writeInt(1);
+                        outStream.writeUTF(target);
+                        outStream.writeInt(data);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            buttonDISCONNECT = new JButton("Disconnect");
+            buttonDISCONNECT.addActionListener(actionEvent -> {
+                try {
+                    outStream.writeInt(2);
+                    thread.interrupt();
+                    disconnect();
+                    NetworkDialog.this.dispose();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            JPanel hostPanel = new JPanel(new BorderLayout());
+            hostPanel.add(new JLabel("Clients:"), BorderLayout.NORTH);
+            hostPanel.add(hosts, BorderLayout.SOUTH);
+
+            JPanel dataPanel = new JPanel(new BorderLayout());
+            dataPanel.add(new JLabel("Data:"), BorderLayout.NORTH);
+            dataPanel.add(textField, BorderLayout.SOUTH);
+
+            JPanel bp = new JPanel(new BorderLayout());
+            bp.add(buttonSEND, BorderLayout.EAST);
+            bp.add(buttonDISCONNECT, BorderLayout.WEST);
+
+            add(hostPanel, BorderLayout.WEST);
+            add(dataPanel, BorderLayout.EAST);
+            add(bp, BorderLayout.SOUTH);
+
+            setVisible(true);
+        }
+    }
+
 }

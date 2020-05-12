@@ -2,17 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="074d561e-9cfc-4723-894f-4ef11901d333" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/conf/conf.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Java/Window$MenuBar$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/conf.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/conf.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BaseAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BaseAI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BigBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBird.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBirdAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBirdAI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BigBirdFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BigBirdFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Bird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Bird.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/BirdArray.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdArray.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/BirdFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/BirdFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Habitat.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Habitat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/IBehaviour.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/STATE.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/STATE.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBird.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBird.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBirdAI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBirdAI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/SmallBirdFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/SmallBirdFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$3.class" afterDir="false" />
@@ -21,6 +31,10 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ConsoleDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ButtonPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$CheckBoxPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ControlPanel$ComboBoxListPanel.class" afterDir="false" />
@@ -31,13 +45,11 @@
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$CurrentBirdsDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$CurrentBirdsDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$ErrorDialog.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$InfoDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/Window$MenuBar$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$MenuBar$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window$MenuBar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Java/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java/Window.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BigBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BigBird.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bird.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BirdArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BirdArray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Habitat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Habitat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SmallBird.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SmallBird.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -75,14 +87,16 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="profiler.calltree.filter" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\workspace\java\src" />
       <recent name="D:\workspace\Java\out\production\Java" />
       <recent name="D:\workspace\Java\res" />
     </key>
@@ -102,18 +116,54 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.Main (1)">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main (2)" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main (3)" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main (4)" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Server" />
+      <module name="Java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main (2)" />
+      <item itemvalue="Application.Main (3)" />
+      <item itemvalue="Application.Main (4)" />
+      <item itemvalue="Application.Main (1)" />
+      <item itemvalue="Application.Server" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main (1)" />
+        <item itemvalue="Application.Server" />
+        <item itemvalue="Application.Main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -215,7 +265,12 @@
       <workItem from="1588841033927" duration="3826000" />
       <workItem from="1588926248920" duration="1279000" />
       <workItem from="1589175577964" duration="1479000" />
-      <workItem from="1589178886256" duration="15992000" />
+      <workItem from="1589178886256" duration="16394000" />
+      <workItem from="1589209631273" duration="2074000" />
+      <workItem from="1589219055679" duration="6652000" />
+      <workItem from="1589225799454" duration="90000" />
+      <workItem from="1589225985346" duration="5056000" />
+      <workItem from="1589257417119" duration="15201000" />
     </task>
     <task id="LOCAL-00001" summary="Оптимизированы потоки: убран лишний поток, в котором просто увеличивалось время, теперь эта задача просто на таймере. Сделано окно информации о симуляции, а так же мелкие фиксы. Эту лабу уже можно сдавать">
       <created>1581862107011</created>
