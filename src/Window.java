@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.sql.*;
 import java.util.*;
 import java.util.Timer;
 
@@ -37,7 +38,6 @@ public class Window extends JFrame {
     public static LinkedList<String> hostList = new LinkedList<String>();
 
     private boolean CONNECTED = false;
-
 
     public Window(int WIDTH, int HEIGHT) {
         this.WINDOW_WIDTH = WIDTH;
@@ -333,7 +333,6 @@ public class Window extends JFrame {
                 if (CONNECTED)
                     disconnect();
                 try {
-                    System.out.println("exit");
                     writeConf(confFile);
                     System.exit(-5);
                 } catch (IOException ex) {
@@ -347,7 +346,6 @@ public class Window extends JFrame {
                 if (CONNECTED)
                     disconnect();
                 try {
-                    System.out.println("exit");
                     writeConf(confFile);
                     System.exit(-5);
                 } catch (IOException ex) {
@@ -486,7 +484,7 @@ public class Window extends JFrame {
             ois = new ObjectInputStream(new FileInputStream(fileName));
             System.out.println(habitat.getTime());
             BirdArray.getBirdArray().removeAllBirds();
-            BirdArray.getBirdArray().setBirdArray((LinkedList<Bird>) ois.readObject(), "" + (habitat.getDoubleTime()));
+            BirdArray.getBirdArray().setBirdArray((LinkedList<Bird>) ois.readObject(), habitat.getTime());
             habitat.repaint();
             ois.close();
         }
@@ -609,6 +607,25 @@ public class Window extends JFrame {
                 }
             });
 
+            JMenu menuDB = new JMenu("Database");
+            menuDB.setToolTipText("Click here to connect to DB");
+            menuDB.addMenuListener(new MenuListener() {
+                @Override
+                public void menuSelected(MenuEvent menuEvent) {;
+                    new DatabaseDialog();
+                }
+
+                @Override
+                public void menuDeselected(MenuEvent menuEvent) {
+
+                }
+
+                @Override
+                public void menuCanceled(MenuEvent menuEvent) {
+
+                }
+            });
+
             JMenu menuAbout = new JMenu("About");
             menuAbout.setToolTipText("Info about laboratory work");
             menuAbout.add("Author").addActionListener(actionEvent -> System.out.println("Danil Charushin"));
@@ -617,6 +634,7 @@ public class Window extends JFrame {
             add(menuRun);
             add(menuConsole);
             add(menuNetwork);
+            add(menuDB);
             add(menuAbout);
         }
     }
@@ -1294,7 +1312,6 @@ public class Window extends JFrame {
             JTextField nameField = new JTextField();
             nameField.addActionListener(ae -> {
                 name = nameField.getText();
-                System.out.println(name);
                 NameDialog.this.dispose();
             });
 
@@ -1433,4 +1450,176 @@ public class Window extends JFrame {
         }
     }
 
+    private class DatabaseDialog extends JDialog {
+        private int DIALOG_WIDTH = 300;
+        private int DIALOG_HEIGHT = 300;
+
+        String DB_URL = "jdbc:postgresql://127.0.0.1:5432/test_db";
+        String USER = "postgres";
+        String PASS = "kapibara";
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        boolean was = false;
+
+        public DatabaseDialog() {
+            setTitle("DATABASE (" + name + ")");
+            setAlwaysOnTop(true);
+            setModal(false);
+            setBounds(
+                    SCREEN_WIDTH / 2 - DIALOG_WIDTH / 2,
+                    SCREEN_HEIGHT / 2 - DIALOG_HEIGHT / 2,
+                    DIALOG_WIDTH,
+                    DIALOG_HEIGHT
+            );
+            setLayout(new GridLayout(1, 2));
+            setBackground(new Color(222,222,222));
+
+            try {
+                Class.forName("org.postgresql.Driver");
+            } catch (ClassNotFoundException e) {
+                System.out.println("PostgreSQL JDBC Driver is not found. Include it in your library path ");
+                return;
+            }
+
+            try {
+                connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            } catch (SQLException e) {
+                new ErrorDialog("Connection Failed");
+            }
+
+            JPanel pRead = new JPanel(new GridLayout(3, 1));
+            pRead.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
+            pRead.add(new JLabel("Read\nSave name:"));
+            JComboBox savings = new JComboBox();
+            try {
+                String SQL = "SELECT save_name FROM bird WHERE player_name=?";
+                pstmt = connection.prepareStatement(SQL);
+                pstmt.setObject(1, name);
+                rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    was = true;
+                    boolean needAdd = true;
+                    String temp = rs.getString(1);
+                    for (int i = 0; i < savings.getItemCount(); i++) {
+                        if (temp.equals(savings.getItemAt(i))) {
+                            needAdd = false;
+                            break;
+                        }
+                    }
+                    if (needAdd)
+                        savings.addItem(temp);
+                }
+                pstmt.close();
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            pRead.add(savings);
+            JButton buttonRead = new JButton("Read");
+            buttonRead.addActionListener(ae -> {
+                if (was) {
+                    try {
+                        String SQL = "SELECT * FROM bird WHERE save_name=? AND player_name=?";
+                        pstmt = connection.prepareStatement(SQL);
+                        pstmt.setObject(1, savings.getSelectedItem().toString());
+                        pstmt.setObject(2, name);
+                        rs = pstmt.executeQuery();
+                        LinkedList<Bird> list = new LinkedList<Bird>();
+                        BirdArray.getBirdArray().removeAllBirds();
+                        while (rs.next()) {
+                            boolean isBig = rs.getBoolean(2);
+                            int cordX = rs.getInt(3);
+                            int cordY = rs.getInt(4);
+                            if (isBig) {
+                                list.addLast(new BigBird(cordX, cordY));
+                            } else {
+                                list.addLast(new SmallBird(cordX, cordY));
+                            }
+                        }
+                        BirdArray.getBirdArray().setBirdArray(list, habitat.getTime());
+                        pstmt.close();
+                        rs.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            pRead.add(buttonRead);
+
+            JPanel pWrite = new JPanel(new GridLayout(4, 1));
+            pWrite.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+            String save_name = "save1";
+            if (was) {
+                save_name = savings.getSelectedItem().toString();
+            }
+            JTextField saveName = new JTextField(save_name);
+            pWrite.add(saveName);
+            pWrite.add(new JLabel("Write"));
+            JCheckBox big = new JCheckBox("big");
+            JCheckBox small = new JCheckBox("small");
+            JPanel checks = new JPanel(new GridLayout(1, 2));
+            big.setSelected(true);
+            small.setSelected(true);
+            checks.add(big);
+            checks.add(small);
+            pWrite.add(checks);
+            JButton buttonWrite = new JButton("Write");
+            buttonWrite.addActionListener(ae -> {
+                String in = saveName.getText();
+                if (in.equals("")) {
+                    in = "save1";
+                    if (was) {
+                        in = savings.getSelectedItem().toString();
+                    }
+                }
+                LinkedList<Bird> list = BirdArray.getBirdArray().getList();
+
+                for (Bird bird : list) {
+                    String SQL = "INSERT INTO bird(size, cord_x, cord_y, save_name, player_name) VALUES (?, ?, ?, ?, ?)";
+                    if ((bird instanceof BigBird) && big.isSelected()) {
+                        try {
+                            pstmt = connection.prepareStatement(SQL);
+                            pstmt.setBoolean(1, true);
+                            pstmt.setInt(2, bird.cordX);
+                            pstmt.setInt(3, bird.cordY);
+                            pstmt.setObject(4, in);
+                            pstmt.setObject(5, name);
+                            pstmt.executeUpdate();
+                            pstmt.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else if ((bird instanceof SmallBird) && small.isSelected()) {
+                        try {
+                            pstmt = connection.prepareStatement(SQL);
+                            pstmt.setBoolean(1, false);
+                            pstmt.setInt(2, bird.cordX);
+                            pstmt.setInt(3, bird.cordY);
+                            pstmt.setObject(4, in);
+                            pstmt.setObject(5, name);
+                            pstmt.executeUpdate();
+                            pstmt.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            pWrite.add(buttonWrite);
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
+                }
+            });
+
+            add(pRead);
+            add(pWrite);
+            setVisible(true);
+        }
+        private void readBirdDB(String save_name) {
+
+        }
+    }
 }

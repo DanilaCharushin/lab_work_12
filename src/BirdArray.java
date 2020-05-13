@@ -36,7 +36,6 @@ public class BirdArray implements Serializable {
             }
             if (bornTime + period <= time) {
                 birds.addElement(bird);
-                System.out.println(bird);
             }
         }
         for (Bird bird : birds) {
